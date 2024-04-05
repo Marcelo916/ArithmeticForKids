@@ -8,12 +8,63 @@
     tools:context=".MainActivity">
 
     <TextView
+        android:id="@+id/displayAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello You!"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginTop="20dp"
+        android:text="@string/arithmetic_for_kids"
+        android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/questionForUser"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="175dp"
+        android:text="@string/what_would_you_like_to_practice_today"
+        android:textSize="22sp"
+        app:layout_constraintBottom_toTopOf="@+id/additionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayAppName"
+        app:layout_constraintVertical_bias="0.5" />
+
+    <Button
+        android:id="@+id/additionButton"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="30dp"
+        android:text="@string/addition"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintTop_toBottomOf="@+id/questionForUser" />
+
+    <Button
+        android:id="@+id/subtractionButton"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/subtraction"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/additionButton" />
+
+    <Button
+        android:id="@+id/multiplicationButton"
+        android:layout_width="200dp"
+        android:layout_height="75dp"
+        android:layout_marginTop="25dp"
+        android:text="@string/multiplication"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/subtractionButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
