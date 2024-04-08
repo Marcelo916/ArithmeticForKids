@@ -11,7 +11,7 @@
         android:id="@+id/additionActivity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="144dp"
+        android:layout_marginTop="45dp"
         android:gravity="center"
         android:text="Addition Activity"
         android:textSize="40sp"
@@ -22,9 +22,10 @@
 
     <Button
         android:id="@+id/startAction"
-        android:layout_width="wrap_content"
+        android:layout_width="225dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
+        android:layout_marginTop="350dp"
+        android:textColor="@color/gray"
         android:gravity="center"
         android:text="@string/go"
         android:textSize="100sp"
@@ -32,13 +33,13 @@
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@color/goButton"/>
+        android:backgroundTint="@color/goButton"/>
 
     <Button
         android:id="@+id/goBackButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/go_back"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -51,7 +52,8 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:progress="45"
+        android:max="30"
+        android:progress="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -85,4 +87,77 @@
         app:layout_constraintEnd_toStartOf="@+id/textViewRight"
         app:layout_constraintStart_toEndOf="@+id/textViewLeft"
         app:layout_constraintTop_toBottomOf="@+id/progressBarAddition" />
+
+    <TableLayout
+        android:layout_width="409dp"
+        android:layout_height="175dp"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="1dp"
+        android:layout_marginBottom="75dp"
+        app:layout_constraintBottom_toTopOf="@+id/startAction"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/additionActivity">
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/answerA"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/marineBlue"
+                android:layout_weight="1"
+                android:height="75dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/answerB"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/marineBlue"
+                android:height="75dp"
+                android:text="Button" />
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" >
+
+            <Button
+                android:id="@+id/answerC"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:backgroundTint="@color/marineBlue"
+                android:height="75dp"
+                android:text="Button" />
+
+            <Button
+                android:id="@+id/answerD"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/marineBlue"
+                android:layout_weight="1"
+                android:height="75dp"
+                android:text="Button" />
+        </TableRow>
+
+    </TableLayout>
+
+    <TextView
+        android:id="@+id/notificationDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:text="TextView"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/goBackButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/startAction"
+        app:layout_constraintVertical_bias="0.171" />
 </androidx.constraintlayout.widget.ConstraintLayout>

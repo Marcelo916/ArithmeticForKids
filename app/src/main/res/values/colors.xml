@@ -2,5 +2,7 @@
 <resources>
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-    <color name="goButton">#FF0BD051</color>
+    <color name="gray">#FF2d3436</color>
+    <color name="goButton">#FF009432</color>
+    <color name="marineBlue">#FF0984e3</color>
 </resources>
