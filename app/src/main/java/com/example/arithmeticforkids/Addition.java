@@ -5,12 +5,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -25,7 +23,7 @@ public class Addition extends AppCompatActivity {
     TextView left, right, middle, bottom;
     ProgressBar timer;
 
-    Game game = new Game();
+    Game game = new Game("addition");
     int secondsRemaining = 30;
 
     CountDownTimer clock = new CountDownTimer(30000, 1000) {
@@ -91,7 +89,7 @@ public class Addition extends AppCompatActivity {
                 start_button.setVisibility(View.INVISIBLE);
 
                 secondsRemaining = 30;
-                game = new Game();
+                game = new Game("addition");
                 nextTurn();
                 clock.start();
 

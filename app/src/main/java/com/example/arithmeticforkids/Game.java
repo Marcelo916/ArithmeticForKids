@@ -10,19 +10,21 @@ public class Game {
     private int totalQuestions;
     private int score;
     private Question currentQuestion;
+    private String operation;
 
-    public Game() {
+    public Game(String operation) {
+        this.operation = operation;
         correct = 0;
         incorrect = 0;
         totalQuestions = 0;
         score = 0;
-        currentQuestion = new Question(10);
+        currentQuestion = new Question(10, operation);
         questions = new ArrayList<Question>();
 
     }
 
     public void newQuestion() {
-        currentQuestion = new Question(totalQuestions * 2 + 5);
+        currentQuestion = new Question(totalQuestions * 2 + 5, operation);
         totalQuestions++;
         questions.add(currentQuestion);
 
@@ -30,7 +32,7 @@ public class Game {
 
     public boolean checkAnswer(int submittedAnswer) {
         boolean isCorrect;
-        if(currentQuestion.getSum() == submittedAnswer) {
+        if(currentQuestion.getAnswer() == submittedAnswer) {
             correct++;
             isCorrect = true;
         } else {

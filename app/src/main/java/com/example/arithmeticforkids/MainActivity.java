@@ -3,7 +3,6 @@ package com.example.arithmeticforkids;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -31,12 +30,15 @@ public class MainActivity extends AppCompatActivity {
         public void onClick(View v) {
             if(v == binding.additionButton) {
                 Intent intent = Addition.additionFactory(getApplicationContext());
+                intent.putExtra("operation", "addition");
                 startActivity(intent);
             } else if (v == binding.subtractionButton) {
                 Intent intent = Subtraction.subtractionFactory(getApplicationContext());
+                intent.putExtra("operation", "subtraction");
                 startActivity(intent);
             } else if (v == binding.multiplicationButton) {
                 Intent intent = Multiplication.multiplicationFactory(getApplicationContext());
+                intent.putExtra("operation", "multiplication");
                 startActivity(intent);
             }
         }
