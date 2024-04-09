@@ -11,9 +11,11 @@
         android:id="@+id/displayAppName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="30dp"
         android:text="@string/arithmetic_for_kids"
-        android:textSize="30sp"
+        android:textColor="@color/superPurple"
+        android:textSize="32sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -25,7 +27,9 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="175dp"
         android:text="@string/what_would_you_like_to_practice_today"
+        android:textColor="@color/superPurple"
         android:textSize="22sp"
+        android:textStyle="italic"
         app:layout_constraintBottom_toTopOf="@+id/additionButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
@@ -41,8 +45,8 @@
         android:text="@string/addition"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/questionForUser" />
 
     <Button
@@ -66,5 +70,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/subtractionButton" />
+
+    <ImageView
+        android:id="@+id/appLogo"
+        android:layout_width="230dp"
+        android:layout_height="135dp"
+        android:contentDescription="@string/app_name"
+        app:layout_constraintBottom_toTopOf="@+id/questionForUser"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/displayAppName"
+        app:srcCompat="@drawable/logo" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

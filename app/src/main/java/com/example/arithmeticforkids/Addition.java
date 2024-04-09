@@ -29,6 +29,7 @@ public class Addition extends AppCompatActivity {
     int secondsRemaining = 30;
 
     CountDownTimer clock = new CountDownTimer(30000, 1000) {
+        @SuppressLint("SetTextI18n")
         @Override
         public void onTick(long millisUntilFinished) {
             secondsRemaining--;
@@ -37,18 +38,21 @@ public class Addition extends AppCompatActivity {
 
         }
 
+        @SuppressLint("SetTextI18n")
         @Override
         public void onFinish() {
             answerA.setEnabled(false);
             answerB.setEnabled(false);
             answerC.setEnabled(false);
             answerD.setEnabled(false);
-            bottom.setText("Time is up!" + game.getCorrect() + "/" + (game.getTotalQuestions() - 1));
+            bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            goButton.setVisibility(View.VISIBLE);
 
         }
     };
 
 
+    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -60,6 +64,11 @@ public class Addition extends AppCompatActivity {
         answerB = findViewById(R.id.answerB);
         answerC = findViewById(R.id.answerC);
         answerD = findViewById(R.id.answerD);
+
+        answerA.setEnabled(false);
+        answerB.setEnabled(false);
+        answerC.setEnabled(false);
+        answerD.setEnabled(false);
 
         timer = findViewById(R.id.progressBarAddition);
 
@@ -78,6 +87,8 @@ public class Addition extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Button start_button = (Button) v;
+
+                start_button.setVisibility(View.INVISIBLE);
 
                 secondsRemaining = 30;
                 game = new Game();

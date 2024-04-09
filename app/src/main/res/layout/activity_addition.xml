@@ -7,33 +7,20 @@
     android:layout_height="match_parent"
     tools:context=".Addition">
 
-    <TextView
-        android:id="@+id/additionActivity"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="45dp"
-        android:gravity="center"
-        android:text="Addition Activity"
-        android:textSize="40sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <Button
         android:id="@+id/startAction"
-        android:layout_width="225dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="350dp"
-        android:textColor="@color/gray"
+        android:backgroundTint="@color/goButton"
         android:gravity="center"
         android:text="@string/go"
+        android:textColor="@color/gray"
         android:textSize="100sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:backgroundTint="@color/goButton"/>
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/goBackButton"
@@ -63,7 +50,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBarAddition" />
@@ -73,7 +60,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/progressBarAddition" />
@@ -82,68 +69,72 @@
         android:id="@+id/textViewMiddle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="70dp"
+        android:text=""
         android:textSize="24sp"
-        android:text="TextView"
         app:layout_constraintEnd_toStartOf="@+id/textViewRight"
         app:layout_constraintStart_toEndOf="@+id/textViewLeft"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarAddition" />
+        app:layout_constraintTop_toTopOf="@+id/progressBarAddition" />
 
     <TableLayout
         android:layout_width="409dp"
         android:layout_height="175dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="100dp"
         android:layout_marginEnd="1dp"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/startAction"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/additionActivity">
+        app:layout_constraintTop_toBottomOf="@+id/textViewMiddle">
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/answerA"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/marineBlue"
                 android:layout_weight="1"
                 android:height="75dp"
-                android:text="Button" />
+                android:backgroundTint="@color/buttons"
+                android:text=""
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/answerB"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/marineBlue"
                 android:height="75dp"
-                android:text="Button" />
+                android:backgroundTint="@color/buttons"
+                android:text=""
+                android:textSize="20sp" />
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent" >
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/answerC"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:backgroundTint="@color/marineBlue"
                 android:height="75dp"
-                android:text="Button" />
+                android:backgroundTint="@color/buttons"
+                android:text=""
+                android:textSize="20sp" />
 
             <Button
                 android:id="@+id/answerD"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:backgroundTint="@color/marineBlue"
                 android:layout_weight="1"
                 android:height="75dp"
-                android:text="Button" />
+                android:backgroundTint="@color/buttons"
+                android:text=""
+                android:textSize="20sp" />
         </TableRow>
 
     </TableLayout>
@@ -153,7 +144,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="TextView"
+        android:text=""
         android:textSize="24sp"
         app:layout_constraintBottom_toTopOf="@+id/goBackButton"
         app:layout_constraintEnd_toEndOf="parent"

@@ -7,12 +7,27 @@
     android:layout_height="match_parent"
     tools:context=".Subtraction">
 
+    <Button
+        android:id="@+id/startActionSubtraction"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="350dp"
+        android:backgroundTint="@color/goButton"
+        android:gravity="center"
+        android:text="@string/goSubtraction"
+        android:textColor="@color/gray"
+        android:textSize="100sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <Button
         android:id="@+id/goBackButtonSubtraction"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="75dp"
+        android:layout_marginBottom="20dp"
         android:text="@string/go_back"
         android:textSize="30sp"
         app:layout_constraintBottom_toBottomOf="parent"

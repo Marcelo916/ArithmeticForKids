@@ -3,8 +3,9 @@
     <string name="addition">Addition</string>
     <string name="subtraction">Subtraction</string>
     <string name="multiplication">Multiplication</string>
-    <string name="arithmetic_for_kids">Arithmetic For Kids!</string>
+    <string name="arithmetic_for_kids">Arithmetic Practice!</string>
     <string name="what_would_you_like_to_practice_today">What would you like to practice today?</string>
     <string name="go_back">Go back</string>
     <string name="go">Go</string>
+    <string name="goSubtraction">Go</string>
 </resources>
