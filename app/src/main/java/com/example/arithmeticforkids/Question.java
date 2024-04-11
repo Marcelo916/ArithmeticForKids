@@ -28,7 +28,12 @@ public class Question {
             this.secondNumber = randomNumber.nextInt(10); // Limit second number for simplicity
             this.answer = this.firstNumber * this.secondNumber;
             this.userPrompt = this.firstNumber + " * " + this.secondNumber + " = ";
-        } else {
+        } else if (operation.equals("division")) {
+            this.secondNumber = 1 + randomNumber.nextInt(9); // This prevents a division error
+            this.firstNumber = randomNumber.nextInt(10) * this.secondNumber;// This equation is for simplicity purposes.
+            this.answer = this.firstNumber / this.secondNumber;
+            this.userPrompt = this.firstNumber + " ÷ " + this.secondNumber + " = ";
+        }else {
             // Default to addition if operation is not specified or invalid
             this.firstNumber = randomNumber.nextInt(maxLimit);
             this.secondNumber = randomNumber.nextInt(maxLimit);

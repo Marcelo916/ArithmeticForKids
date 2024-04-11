@@ -5,10 +5,10 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Multiplication">
+    tools:context=".Division">
 
     <Button
-        android:id="@+id/startActionMultiplication"
+        android:id="@+id/startActionDivision"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="350dp"
@@ -23,7 +23,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/goBackButtonMultiplication"
+        android:id="@+id/goBackButtonDivision"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -35,7 +35,7 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <ProgressBar
-        android:id="@+id/progressBarMultiplication"
+        android:id="@+id/progressBarDivision"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -46,35 +46,35 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textViewLeftMultiplication"
+        android:id="@+id/textViewLeftDivision"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:text=""
         android:textSize="24sp"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarMultiplication" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBarDivision" />
 
     <TextView
-        android:id="@+id/textViewRightMultiplication"
+        android:id="@+id/textViewRightDivision"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:text=""
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/progressBarMultiplication" />
+        app:layout_constraintTop_toBottomOf="@+id/progressBarDivision" />
 
     <TextView
-        android:id="@+id/textViewMiddleMultiplication"
+        android:id="@+id/textViewMiddleDivision"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="70dp"
         android:text=""
         android:textSize="24sp"
-        app:layout_constraintEnd_toStartOf="@+id/textViewRightMultiplication"
-        app:layout_constraintStart_toEndOf="@+id/textViewLeftMultiplication"
-        app:layout_constraintTop_toTopOf="@+id/progressBarMultiplication" />
+        app:layout_constraintEnd_toStartOf="@+id/textViewRightDivision"
+        app:layout_constraintStart_toEndOf="@+id/textViewLeftDivision"
+        app:layout_constraintTop_toTopOf="@+id/progressBarDivision" />
 
     <TableLayout
         android:layout_width="409dp"
@@ -82,17 +82,17 @@
         android:layout_marginStart="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="10dp"
-        app:layout_constraintBottom_toTopOf="@+id/startActionMultiplication"
+        app:layout_constraintBottom_toTopOf="@+id/startActionDivision"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textViewMiddleMultiplication">
+        app:layout_constraintTop_toBottomOf="@+id/textViewMiddleDivision">
 
         <TableRow
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/answerAMultiplication"
+                android:id="@+id/answerADivision"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -102,7 +102,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/answerBMultiplication"
+                android:id="@+id/answerBDivision"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -117,7 +117,7 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/answerCMultiplication"
+                android:id="@+id/answerCDivision"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -127,7 +127,7 @@
                 android:textSize="20sp" />
 
             <Button
-                android:id="@+id/answerDMultiplication"
+                android:id="@+id/answerDDivision"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -140,16 +140,16 @@
     </TableLayout>
 
     <TextView
-        android:id="@+id/notificationDisplayMultiplication"
+        android:id="@+id/notificationDisplayDivision"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:text=""
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/goBackButtonMultiplication"
+        app:layout_constraintBottom_toTopOf="@+id/goBackButtonDivision"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/startActionMultiplication"
+        app:layout_constraintTop_toBottomOf="@+id/startActionDivision"
         app:layout_constraintVertical_bias="0.171" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

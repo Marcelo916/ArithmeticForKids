@@ -10,20 +10,25 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 
+import com.example.arithmeticforkids.databinding.ActivityDivisionBinding;
+import com.example.arithmeticforkids.databinding.ActivityMultiplicationBinding;
 
-import com.example.arithmeticforkids.databinding.ActivityAdditionBinding;
+public class Division extends AppCompatActivity {
 
-
-public class Addition extends AppCompatActivity {
-    ActivityAdditionBinding binding;
+    ActivityDivisionBinding binding;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
+
     ProgressBar timer;
 
-    Game game = new Game("addition");
+    Game game = new Game("division");
     int secondsRemaining = 30;
 
     CountDownTimer clock = new CountDownTimer(30000, 1000) {
@@ -49,37 +54,34 @@ public class Addition extends AppCompatActivity {
         }
     };
 
-
-    @SuppressLint("SetTextI18n")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityAdditionBinding.inflate(getLayoutInflater());
+        binding = ActivityDivisionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        goButton = findViewById(R.id.startAction);
-        answerA = findViewById(R.id.answerA);
-        answerB = findViewById(R.id.answerB);
-        answerC = findViewById(R.id.answerC);
-        answerD = findViewById(R.id.answerD);
+        goButton = findViewById(R.id.startActionDivision);
+        answerA = findViewById(R.id.answerADivision);
+        answerB = findViewById(R.id.answerBDivision);
+        answerC = findViewById(R.id.answerCDivision);
+        answerD = findViewById(R.id.answerDDivision);
 
         answerA.setEnabled(false);
         answerB.setEnabled(false);
         answerC.setEnabled(false);
         answerD.setEnabled(false);
 
-        timer = findViewById(R.id.progressBarAddition);
+        timer = findViewById(R.id.progressBarDivision);
 
-        left = findViewById(R.id.textViewLeft);
-        right = findViewById(R.id.textViewRight);
-        middle = findViewById(R.id.textViewMiddle);
-        bottom = findViewById(R.id.notificationDisplay);
+        left = findViewById(R.id.textViewLeftDivision);
+        right = findViewById(R.id.textViewRightDivision);
+        middle = findViewById(R.id.textViewMiddleDivision);
+        bottom = findViewById(R.id.notificationDisplayDivision);
 
         left.setText("0sec");
         middle.setText("");
         right.setText("0pts");
         bottom.setText("Press Go!");
-
 
         View.OnClickListener startButtonClickLister = new View.OnClickListener() {
             @Override
@@ -89,7 +91,7 @@ public class Addition extends AppCompatActivity {
                 start_button.setVisibility(View.INVISIBLE);
 
                 secondsRemaining = 30;
-                game = new Game("addition");
+                game = new Game("division");
                 nextTurn();
                 clock.start();
 
@@ -117,15 +119,14 @@ public class Addition extends AppCompatActivity {
         answerC.setOnClickListener(answerClickListener);
         answerD.setOnClickListener(answerClickListener);
 
-        binding.goBackButton.setOnClickListener(new View.OnClickListener() {
+        binding.goBackButtonDivision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Addition.this, MainActivity.class);
+                Intent intent = new Intent(Division.this, MainActivity.class);
                 startActivity(intent);
                 finish();
             }
         });
-
 
     }
 
@@ -148,9 +149,8 @@ public class Addition extends AppCompatActivity {
         bottom.setText(game.getCorrect() + "/" + (game.getTotalQuestions() - 1));
     }
 
-    public static Intent additionFactory(Context context) {
-        Intent intent = new Intent(context, Addition.class);
+    public static Intent divisionFactory(Context context) {
+        Intent intent = new Intent(context, Division.class);
         return intent;
     }
-
 }

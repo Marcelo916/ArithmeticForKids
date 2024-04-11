@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
         binding.additionButton.setOnClickListener(buttonClickLister);
         binding.subtractionButton.setOnClickListener(buttonClickLister);
         binding.multiplicationButton.setOnClickListener(buttonClickLister);
+        binding.divisionButton.setOnClickListener(buttonClickLister);
     }
 
     private final View.OnClickListener buttonClickLister = new View.OnClickListener() {
@@ -39,6 +40,10 @@ public class MainActivity extends AppCompatActivity {
             } else if (v == binding.multiplicationButton) {
                 Intent intent = Multiplication.multiplicationFactory(getApplicationContext());
                 intent.putExtra("operation", "multiplication");
+                startActivity(intent);
+            } else if (v == binding.divisionButton) {
+                Intent intent = Division.divisionFactory(getApplicationContext());
+                intent.putExtra("operation", "division");
                 startActivity(intent);
             }
         }
