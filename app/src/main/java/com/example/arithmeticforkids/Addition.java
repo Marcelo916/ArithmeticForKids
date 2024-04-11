@@ -121,8 +121,10 @@ public class Addition extends AppCompatActivity {
         binding.goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Toast.makeText(Addition.this, "Clicking", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Addition.this, MainActivity.class);
+                //Intent intent = new Intent(Addition.this, MainActivity.class);
+                //startActivity(intent);
+                //finish();
+                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
                 finish();
             }
