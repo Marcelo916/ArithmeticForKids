@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -120,6 +121,7 @@ public class Addition extends AppCompatActivity {
         binding.goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Toast.makeText(Addition.this, "Clicking", Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(Addition.this, MainActivity.class);
                 startActivity(intent);
                 finish();
