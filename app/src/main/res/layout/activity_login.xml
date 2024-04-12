@@ -13,7 +13,7 @@
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="310dp"
         android:layout_margin="30dp"
         android:background="@drawable/custom_edittext"
         app:cardCornerRadius="30dp"
@@ -29,7 +29,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="54dp"
-                android:text="Login"
+                android:text="@string/login"
                 android:id="@+id/loginText"
                 android:textSize="36sp"
                 android:textAlignment="center"
@@ -41,22 +41,22 @@
                 android:layout_height="50dp"
                 android:id="@+id/userName"
                 android:background="@drawable/custom_edittext"
-                android:drawableLeft="@drawable/baseline_person_24"
+                android:drawableStart="@drawable/baseline_person_24"
                 android:drawablePadding="8dp"
-                android:hint="Username"
+                android:hint="@string/username"
                 android:padding="8dp"
                 android:textColor="@color/black"
                 android:textColorHighlight="@color/cardview_dark_background"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:id="@+id/password"
                 android:background="@drawable/custom_edittext"
-                android:drawableLeft="@drawable/baseline_lock_24"
+                android:drawableStart="@drawable/baseline_lock_24"
                 android:drawablePadding="8dp"
-                android:hint="Password"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:padding="8dp"
                 android:textColor="@color/black"
@@ -68,9 +68,11 @@
                 android:layout_height="60dp"
                 android:layout_marginTop="20dp"
                 android:id="@+id/loggingButton"
-                android:text="Login"
+                android:text="@string/loginButton"
                 android:backgroundTint="@color/purple"
-                android:textSize="18sp"/>
+                android:textSize="18sp"
+                android:background="@drawable/custom_edittext"
+                android:textColor="@android:color/white"/>
 
 
         </LinearLayout>

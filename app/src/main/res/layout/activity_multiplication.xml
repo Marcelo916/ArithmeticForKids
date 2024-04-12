@@ -9,22 +9,23 @@
 
     <Button
         android:id="@+id/startActionMultiplication"
-        android:layout_width="wrap_content"
+        android:layout_width="180dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="350dp"
         android:backgroundTint="@color/goButton"
         android:gravity="center"
         android:text="@string/goSubtraction"
         android:textColor="@color/gray"
-        android:textSize="100sp"
+        android:textSize="80sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/custom_edittext"/>
 
     <Button
         android:id="@+id/goBackButtonMultiplication"
-        android:layout_width="wrap_content"
+        android:layout_width="160dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
         android:text="@string/go_back"
@@ -32,7 +33,10 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        android:background="@drawable/custom_edittext"
+        android:backgroundTint="@color/purple"
+        android:textColor="@android:color/white"/>
 
     <ProgressBar
         android:id="@+id/progressBarMultiplication"
@@ -43,7 +47,8 @@
         android:progress="20"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        android:progressTint="@color/goButton"/>
 
     <TextView
         android:id="@+id/textViewLeftMultiplication"
@@ -79,8 +84,8 @@
     <TableLayout
         android:layout_width="409dp"
         android:layout_height="175dp"
-        android:layout_marginStart="1dp"
-        android:layout_marginEnd="1dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
         app:layout_constraintBottom_toTopOf="@+id/startActionMultiplication"
         app:layout_constraintEnd_toEndOf="parent"
@@ -89,52 +94,63 @@
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal">
 
             <Button
                 android:id="@+id/answerAMultiplication"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="140dp"
+                android:layout_height="60dp"
                 android:height="75dp"
                 android:backgroundTint="@color/buttons"
                 android:text=""
-                android:textSize="20sp" />
+                android:textSize="25sp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_edittext"
+                android:textColor="@color/gray"/>
 
             <Button
                 android:id="@+id/answerBMultiplication"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="140dp"
+                android:layout_height="60dp"
                 android:height="75dp"
                 android:backgroundTint="@color/buttons"
                 android:text=""
-                android:textSize="20sp" />
+                android:textSize="25sp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_edittext"
+                android:textColor="@color/gray"/>
         </TableRow>
 
         <TableRow
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="match_parent"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="20dp">
 
             <Button
                 android:id="@+id/answerCMultiplication"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="140dp"
+                android:layout_height="60dp"
                 android:height="75dp"
                 android:backgroundTint="@color/buttons"
                 android:text=""
-                android:textSize="20sp" />
+                android:textSize="25sp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_edittext"
+                android:textColor="@color/gray"/>
 
             <Button
                 android:id="@+id/answerDMultiplication"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:layout_width="140dp"
+                android:layout_height="60dp"
                 android:height="75dp"
                 android:backgroundTint="@color/buttons"
                 android:text=""
-                android:textSize="20sp" />
+                android:textSize="25sp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/custom_edittext"
+                android:textColor="@color/gray"/>
         </TableRow>
 
     </TableLayout>

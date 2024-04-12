@@ -122,7 +122,10 @@ public class Division extends AppCompatActivity {
         binding.goBackButtonDivision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Division.this, MainActivity.class);
+                //Intent intent = new Intent(Division.this, MainActivity.class);
+                //startActivity(intent);
+                //finish();
+                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
                 finish();
             }

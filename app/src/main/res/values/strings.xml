@@ -9,4 +9,8 @@
     <string name="go">Go</string>
     <string name="goSubtraction">Go</string>
     <string name="division">Division</string>
+    <string name="login">Login</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="loginButton">Login</string>
 </resources>

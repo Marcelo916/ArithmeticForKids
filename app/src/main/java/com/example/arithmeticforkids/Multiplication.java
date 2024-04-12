@@ -119,7 +119,10 @@ public class Multiplication extends AppCompatActivity {
         binding.goBackButtonMultiplication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Multiplication.this, MainActivity.class);
+                //Intent intent = new Intent(Multiplication.this, MainActivity.class);
+                //startActivity(intent);
+                //finish();
+                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
                 finish();
             }

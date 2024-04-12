@@ -118,7 +118,10 @@ public class Subtraction extends AppCompatActivity {
         binding.goBackButtonSubtraction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(Subtraction.this, MainActivity.class);
+                //Intent intent = new Intent(Subtraction.this, MainActivity.class);
+                //startActivity(intent);
+                //finish();
+                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
                 finish();
             }

@@ -5,5 +5,14 @@
         <!-- <item name="colorPrimary">@color/my_light_primary</item> -->
     </style>
 
+    <style name="Theme.ArithmeticForKids2" parent="Theme.AppCompat.DayNight.DarkActionBar">
+        <!-- Primary branding color for the app -->
+       <item name="colorPrimary">#FF8854d0</item>
+        <!-- Dark variant of the primary branding color -->
+        <item name="colorPrimaryDark">#FFa55eea</item>
+        <!-- Accent color used for controls and indicators -->
+        <item name="colorAccent">#FF4081</item>
+    </style>
+
     <style name="Theme.ArithmeticForKids" parent="Base.Theme.ArithmeticForKids" />
 </resources>
