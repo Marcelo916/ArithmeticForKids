@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String MAIN_ACTIVITY_USER_ID = "com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
     ActivityMainBinding binding;
     private int loggedInUserId = -1;
+    public static final String TAG = "DAC_APPLOG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
