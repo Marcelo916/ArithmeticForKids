@@ -29,6 +29,8 @@ public class Addition extends AppCompatActivity {
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
     ProgressBar timer;
+    //private boolean isAdmin;
+    //private LoginActivity loginActivity = new LoginActivity();
 
     Game game = new Game("addition");
     int secondsRemaining = 30;
@@ -124,15 +126,28 @@ public class Addition extends AppCompatActivity {
         answerC.setOnClickListener(answerClickListener);
         answerD.setOnClickListener(answerClickListener);
 
+
+        //int isAdmin = loginActivity.verifyUser();
+
         binding.goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 //Intent intent = new Intent(Addition.this, MainActivity.class);
                 //startActivity(intent);
                 //finish();
+                //TODO: Here is the bug "You should check if the user is Admin or not" then go back to the respective factory
+                //Intent intent = AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), 0);
                 Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
                 finish();
+
+                /**Intent intent;
+                if (isAdmin == -1) {
+                    intent = new Intent(Addition.this, AdminMainActivity.class);
+                } else {
+                    intent = new Intent(Addition.this, MainActivity.class);
+                }
+                startActivity(intent);*/
             }
         });
 
