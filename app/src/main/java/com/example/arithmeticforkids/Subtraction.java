@@ -18,10 +18,15 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.SubtractionLog;
 import com.example.arithmeticforkids.databinding.ActivitySubtractionBinding;
+
+import java.util.ArrayList;
 
 public class Subtraction extends AppCompatActivity {
     ActivitySubtractionBinding binding;
+    private AdditionLogRepository repository;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
@@ -49,6 +54,8 @@ public class Subtraction extends AppCompatActivity {
             answerC.setEnabled(false);
             answerD.setEnabled(false);
             bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            insertSubtractionRecord();
+            updateDisplaySubtraction();
             goButton.setVisibility(View.VISIBLE);
 
         }
@@ -60,6 +67,8 @@ public class Subtraction extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivitySubtractionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repository = AdditionLogRepository.getRepository(getApplication());
 
         goButton = findViewById(R.id.startActionSubtraction);
         answerA = findViewById(R.id.answerASubtraction);
@@ -198,7 +207,6 @@ public class Subtraction extends AppCompatActivity {
     private void showLogoutDialogSubtraction() {
         AlertDialog.Builder alertBuilder = new AlertDialog.Builder(Subtraction.this);
         final AlertDialog alertDialog = alertBuilder.create();
-
         alertBuilder.setMessage("Logout?");
 
         alertBuilder.setPositiveButton("Logout?", new DialogInterface.OnClickListener() {
@@ -221,6 +229,24 @@ public class Subtraction extends AppCompatActivity {
     private void logoutSubtraction() {
         //TODO: Finish logout method
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+    }
+
+
+    private void insertSubtractionRecord() {
+        SubtractionLog log = new SubtractionLog(game.getScore());
+        repository.insertSubtractionLog(log);
+
+    }
+
+    public void updateDisplaySubtraction() {
+        ArrayList<SubtractionLog> allLogsSubtraction = repository.getAllLogsSubtraction();
+
+        StringBuilder sb = new StringBuilder();
+        for(SubtractionLog log : allLogsSubtraction) {
+            sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
+            sb.append(log);
+        }
+        bottom.setText(sb.toString());
     }
 
 }

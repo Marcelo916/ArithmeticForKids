@@ -18,11 +18,16 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.MultiplicationLog;
 import com.example.arithmeticforkids.databinding.ActivityMultiplicationBinding;
+
+import java.util.ArrayList;
 
 public class Multiplication extends AppCompatActivity {
 
     ActivityMultiplicationBinding binding;
+    private AdditionLogRepository repository;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
@@ -50,6 +55,8 @@ public class Multiplication extends AppCompatActivity {
             answerC.setEnabled(false);
             answerD.setEnabled(false);
             bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            insertMultiplicationRecord();
+            updateDisplayMultiplication();
             goButton.setVisibility(View.VISIBLE);
 
         }
@@ -61,6 +68,8 @@ public class Multiplication extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityMultiplicationBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repository = AdditionLogRepository.getRepository(getApplication());
 
         goButton = findViewById(R.id.startActionMultiplication);
         answerA = findViewById(R.id.answerAMultiplication);
@@ -212,6 +221,22 @@ public class Multiplication extends AppCompatActivity {
     private void logoutMultiplication() {
         //TODO: Finish logout method
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+    }
+
+    private void insertMultiplicationRecord(){
+        MultiplicationLog log = new MultiplicationLog(game.getScore());
+        repository.insertMultiplicationLog(log);
+    }
+
+    public void updateDisplayMultiplication() {
+        ArrayList<MultiplicationLog> allLogsMultiplication = repository.getAllLogsMultiplication();
+
+        StringBuilder sb = new StringBuilder();
+        for(MultiplicationLog log : allLogsMultiplication) {
+            sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
+            sb.append(log);
+        }
+        bottom.setText(sb.toString());
     }
 
 

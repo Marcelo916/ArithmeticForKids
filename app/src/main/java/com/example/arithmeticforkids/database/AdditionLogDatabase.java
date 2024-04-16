@@ -12,15 +12,21 @@ import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.arithmeticforkids.MainActivity;
 import com.example.arithmeticforkids.database.entities.AdditionLog;
+import com.example.arithmeticforkids.database.entities.DivisionLog;
+import com.example.arithmeticforkids.database.entities.MultiplicationLog;
+import com.example.arithmeticforkids.database.entities.SubtractionLog;
 import com.example.arithmeticforkids.database.typeConverters.LocalDateTypeConverter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 @TypeConverters(LocalDateTypeConverter.class)
-@Database(entities = {AdditionLog.class}, version = 1, exportSchema = false)
+@Database(entities = {AdditionLog.class, SubtractionLog.class, MultiplicationLog.class, DivisionLog.class}, version = 4, exportSchema = false)
 public abstract class AdditionLogDatabase extends RoomDatabase {
 
+    public static final String SUBTRACTION_LOG_TABLE = "SubtractionLogTable";
+    public static final String MULTIPLICATION_LOG_TABLE = "MultiplicationLogTable";
+    public static final String DIVISION_LOG_TABLE = "DivisionLogTable";
     private static final String DATABASE_NAME = "AdditionLogDatabase";
     public static final String ADDITION_LOG_TABLE = "additionLogTable";
 
@@ -55,4 +61,10 @@ public abstract class AdditionLogDatabase extends RoomDatabase {
     };
 
     public abstract AdditionLogDAO additionLogDAO();
+
+    public abstract SubtractionLogDAO subtractionLogDAO();
+
+    public abstract MultiplicationLogDAO multiplicationLogDAO();
+
+    public abstract DivisionLogDAO divisionLogDAO();
 }

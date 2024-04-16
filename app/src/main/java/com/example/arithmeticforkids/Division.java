@@ -22,12 +22,17 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.DivisionLog;
 import com.example.arithmeticforkids.databinding.ActivityDivisionBinding;
 import com.example.arithmeticforkids.databinding.ActivityMultiplicationBinding;
+
+import java.util.ArrayList;
 
 public class Division extends AppCompatActivity {
 
     ActivityDivisionBinding binding;
+    private AdditionLogRepository repository;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
@@ -55,6 +60,8 @@ public class Division extends AppCompatActivity {
             answerC.setEnabled(false);
             answerD.setEnabled(false);
             bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            insertDivisionRecord();
+            updateDisplayDivision();
             goButton.setVisibility(View.VISIBLE);
 
         }
@@ -65,6 +72,8 @@ public class Division extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityDivisionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repository = AdditionLogRepository.getRepository(getApplication());
 
         goButton = findViewById(R.id.startActionDivision);
         answerA = findViewById(R.id.answerADivision);
@@ -215,6 +224,22 @@ public class Division extends AppCompatActivity {
     private void logoutDivision() {
         //TODO: Finish logout method
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+    }
+
+    private void insertDivisionRecord() {
+        DivisionLog log = new DivisionLog(game.getScore());
+        repository.insertDivisionLog(log);
+    }
+
+    public void updateDisplayDivision() {
+        ArrayList<DivisionLog> allLogsDivision = repository.getAllLogsDivision();
+
+        StringBuilder sb = new StringBuilder();
+        for(DivisionLog log : allLogsDivision) {
+            sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
+            sb.append(log);
+        }
+        bottom.setText(sb.toString());
     }
 
 
