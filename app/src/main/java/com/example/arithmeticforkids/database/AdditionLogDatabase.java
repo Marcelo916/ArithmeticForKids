@@ -7,14 +7,17 @@ import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.TypeConverters;
 import androidx.sqlite.db.SupportSQLiteDatabase;
 
 import com.example.arithmeticforkids.MainActivity;
 import com.example.arithmeticforkids.database.entities.AdditionLog;
+import com.example.arithmeticforkids.database.typeConverters.LocalDateTypeConverter;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+@TypeConverters(LocalDateTypeConverter.class)
 @Database(entities = {AdditionLog.class}, version = 1, exportSchema = false)
 public abstract class AdditionLogDatabase extends RoomDatabase {
 

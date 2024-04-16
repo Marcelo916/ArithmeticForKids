@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -20,11 +21,17 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.AdditionLog;
 import com.example.arithmeticforkids.databinding.ActivityAdditionBinding;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 
 public class Addition extends AppCompatActivity {
     ActivityAdditionBinding binding;
+    private AdditionLogRepository repository;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
@@ -53,6 +60,8 @@ public class Addition extends AppCompatActivity {
             answerC.setEnabled(false);
             answerD.setEnabled(false);
             bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            insertAdditionRecord();
+            updateDisplay();
             goButton.setVisibility(View.VISIBLE);
 
         }
@@ -65,6 +74,8 @@ public class Addition extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAdditionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repository = AdditionLogRepository.getRepository(getApplication());
 
         goButton = findViewById(R.id.startAction);
         answerA = findViewById(R.id.answerA);
@@ -99,7 +110,9 @@ public class Addition extends AppCompatActivity {
 
                 secondsRemaining = 30;
                 game = new Game("addition");
+                //insertAdditionRecord();
                 nextTurn();
+                right.setText(Integer.toString(game.getScore()) + "pts");
                 clock.start();
 
             }
@@ -229,6 +242,32 @@ public class Addition extends AppCompatActivity {
     private void logoutAddition() {
         //TODO: Finish logout method
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+    }
+
+    //This method inserts the records to the database
+    private void insertAdditionRecord() {
+        AdditionLog log = new AdditionLog(game.getScore());
+        repository.insertAdditionLog(log);
+    }
+
+
+    //This method retrieves records from the database
+    private void updateDisplay() {
+        ArrayList<AdditionLog> allLogs = repository.getAllLogs();
+
+        StringBuilder sb = new StringBuilder();
+        for(AdditionLog log : allLogs) {
+            sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
+            sb.append(log);
+        }
+        bottom.setText(sb.toString());
+        //right.setText(Integer.toString(game.getScore()) + "pts");
+
+
+        //String currentInfo = binding.textViewRight.getText().toString();
+        //Log.d(MainActivity.TAG, "Current info: " + currentInfo);
+        //String newDisplay = String.format(Locale.US, "")
+        //Log.i(MainActivity.TAG, repository.getAllLogs().toString());
     }
 
 }

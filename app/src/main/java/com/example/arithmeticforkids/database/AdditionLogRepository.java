@@ -14,11 +14,32 @@ import java.util.concurrent.Future;
 public class AdditionLogRepository {
     private AdditionLogDAO additionLogDAO;
     private ArrayList<AdditionLog> allLogs;
+    private static AdditionLogRepository repository;
 
     public AdditionLogRepository(Application application) {
         AdditionLogDatabase db = AdditionLogDatabase.getDatabase(application);
         this.additionLogDAO = db.additionLogDAO();
-        this.allLogs = this.additionLogDAO.getAdditionRecords();
+        this.allLogs = (ArrayList<AdditionLog>) this.additionLogDAO.getAdditionRecords();
+    }
+
+    public static AdditionLogRepository getRepository(Application application) {
+        if(repository != null) {
+            return repository;
+        }
+        Future<AdditionLogRepository> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<AdditionLogRepository>() {
+                    @Override
+                    public AdditionLogRepository call() throws Exception {
+                        return new AdditionLogRepository(application);
+                    }
+                }
+        );
+        try {
+            return future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.d(MainActivity.TAG, "Problem getting AdditionLogRepository, thread error.");
+        }
+        return null;
     }
 
     public ArrayList<AdditionLog> getAllLogs() {
@@ -26,7 +47,7 @@ public class AdditionLogRepository {
                 new Callable<ArrayList<AdditionLog>>() {
                     @Override
                     public ArrayList<AdditionLog> call() throws Exception {
-                        return additionLogDAO.getAdditionRecords();
+                        return (ArrayList<AdditionLog>) additionLogDAO.getAdditionRecords();
                     }
                 }
         );
