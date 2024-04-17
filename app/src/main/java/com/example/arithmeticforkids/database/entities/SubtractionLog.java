@@ -16,9 +16,11 @@ public class SubtractionLog {
 
     private int bestScore;
     private LocalDateTime date;
+    private int userId;
 
-    public SubtractionLog(int bestScore) {
+    public SubtractionLog(int bestScore, int userId) {
         this.bestScore = bestScore;
+        this.userId = userId;
         date = LocalDateTime.now();
     }
 
@@ -33,12 +35,12 @@ public class SubtractionLog {
         if (this == o) return true;
         if (!(o instanceof SubtractionLog)) return false;
         SubtractionLog that = (SubtractionLog) o;
-        return getId() == that.getId() && getBestScore() == that.getBestScore() && Objects.equals(getDate(), that.getDate());
+        return getId() == that.getId() && getBestScore() == that.getBestScore() && getUserId() == that.getUserId() && Objects.equals(getDate(), that.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getBestScore(), getDate());
+        return Objects.hash(getId(), getBestScore(), getDate(), getUserId());
     }
 
     public int getId() {
@@ -63,5 +65,13 @@ public class SubtractionLog {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

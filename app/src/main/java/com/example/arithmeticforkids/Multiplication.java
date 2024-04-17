@@ -33,6 +33,7 @@ public class Multiplication extends AppCompatActivity {
     TextView left, right, middle, bottom;
 
     ProgressBar timer;
+    int loggedInUserId = -1;
 
     Game game = new Game("multiplication");
     int secondsRemaining = 30;
@@ -224,7 +225,7 @@ public class Multiplication extends AppCompatActivity {
     }
 
     private void insertMultiplicationRecord(){
-        MultiplicationLog log = new MultiplicationLog(game.getScore());
+        MultiplicationLog log = new MultiplicationLog(game.getScore(), loggedInUserId);
         repository.insertMultiplicationLog(log);
     }
 

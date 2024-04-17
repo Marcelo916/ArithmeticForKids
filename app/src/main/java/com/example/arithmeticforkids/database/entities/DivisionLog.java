@@ -15,9 +15,11 @@ public class DivisionLog {
     private int id;
     private int bestScore;
     private LocalDateTime date;
+    private int userId;
 
-    public DivisionLog(int bestScore) {
+    public DivisionLog(int bestScore, int userId) {
         this.bestScore = bestScore;
+        this.userId = userId;
         date = LocalDateTime.now();
     }
 
@@ -32,12 +34,12 @@ public class DivisionLog {
         if (this == o) return true;
         if (!(o instanceof DivisionLog)) return false;
         DivisionLog that = (DivisionLog) o;
-        return getId() == that.getId() && getBestScore() == that.getBestScore() && Objects.equals(getDate(), that.getDate());
+        return getId() == that.getId() && getBestScore() == that.getBestScore() && getUserId() == that.getUserId() && Objects.equals(getDate(), that.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getBestScore(), getDate());
+        return Objects.hash(getId(), getBestScore(), getDate(), getUserId());
     }
 
     public int getId() {
@@ -62,5 +64,13 @@ public class DivisionLog {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

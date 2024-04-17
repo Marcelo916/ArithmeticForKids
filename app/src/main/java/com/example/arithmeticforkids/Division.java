@@ -38,6 +38,7 @@ public class Division extends AppCompatActivity {
     TextView left, right, middle, bottom;
 
     ProgressBar timer;
+    int loggedInUserId = -1;
 
     Game game = new Game("division");
     int secondsRemaining = 30;
@@ -227,7 +228,7 @@ public class Division extends AppCompatActivity {
     }
 
     private void insertDivisionRecord() {
-        DivisionLog log = new DivisionLog(game.getScore());
+        DivisionLog log = new DivisionLog(game.getScore(), loggedInUserId);
         repository.insertDivisionLog(log);
     }
 

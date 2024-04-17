@@ -32,6 +32,7 @@ public class Subtraction extends AppCompatActivity {
     TextView left, right, middle, bottom;
 
     ProgressBar timer;
+    int loggedInUserId = -1;
 
     Game game = new Game("subtraction");
     int secondsRemaining = 30;
@@ -233,7 +234,7 @@ public class Subtraction extends AppCompatActivity {
 
 
     private void insertSubtractionRecord() {
-        SubtractionLog log = new SubtractionLog(game.getScore());
+        SubtractionLog log = new SubtractionLog(game.getScore(), loggedInUserId);
         repository.insertSubtractionLog(log);
 
     }
