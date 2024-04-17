@@ -35,6 +35,7 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
+
     //We will have to update this method. The code is to test the login page working properly.
     public int verifyUser() {
         //Hardcoded valid user and password

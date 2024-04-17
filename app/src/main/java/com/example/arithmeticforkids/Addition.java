@@ -36,6 +36,9 @@ public class Addition extends AppCompatActivity {
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
     ProgressBar timer;
+
+    //TODO: Add login information
+    int loggedInUserId = -1;
     //private boolean isAdmin;
     //private LoginActivity loginActivity = new LoginActivity();
 
@@ -246,7 +249,7 @@ public class Addition extends AppCompatActivity {
 
     //This method inserts the records to the database
     private void insertAdditionRecord() {
-        AdditionLog log = new AdditionLog(game.getScore());
+        AdditionLog log = new AdditionLog(game.getScore(), loggedInUserId);
         repository.insertAdditionLog(log);
     }
 

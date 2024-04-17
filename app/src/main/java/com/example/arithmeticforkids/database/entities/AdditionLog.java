@@ -21,8 +21,11 @@ public class AdditionLog {
     private LocalDateTime date;
     //private Date date;
 
-    public AdditionLog(int bestScore) {
+    private int userId;
+
+    public AdditionLog(int bestScore, int userId) {
         this.bestScore = bestScore;
+        this.userId = userId;
         //date = new Date();
         date = LocalDateTime.now();
     }
@@ -41,12 +44,12 @@ public class AdditionLog {
         if (this == o) return true;
         if (!(o instanceof AdditionLog)) return false;
         AdditionLog that = (AdditionLog) o;
-        return getId() == that.getId() && getBestScore() == that.getBestScore() && Objects.equals(getDate(), that.getDate());
+        return getId() == that.getId() && getBestScore() == that.getBestScore() && getUserId() == that.getUserId() && Objects.equals(getDate(), that.getDate());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getBestScore(), getDate());
+        return Objects.hash(getId(), getBestScore(), getDate(), getUserId());
     }
 
     public int getId() {
@@ -71,5 +74,13 @@ public class AdditionLog {
 
     public void setDate(LocalDateTime date) {
         this.date = date;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
     }
 }

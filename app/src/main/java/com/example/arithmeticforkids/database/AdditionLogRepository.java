@@ -8,6 +8,7 @@ import com.example.arithmeticforkids.database.entities.AdditionLog;
 import com.example.arithmeticforkids.database.entities.DivisionLog;
 import com.example.arithmeticforkids.database.entities.MultiplicationLog;
 import com.example.arithmeticforkids.database.entities.SubtractionLog;
+import com.example.arithmeticforkids.database.entities.User;
 
 import java.util.ArrayList;
 import java.util.concurrent.Callable;
@@ -19,6 +20,7 @@ public class AdditionLogRepository {
     private final SubtractionLogDAO subtractionLogDAO;
     private final MultiplicationLogDAO multiplicationLogDAO;
     private final DivisionLogDAO divisionLogDAO;
+    private final UserDAO userDAO;
     private ArrayList<AdditionLog> allLogs;
     private static AdditionLogRepository repository;
 
@@ -28,6 +30,7 @@ public class AdditionLogRepository {
         this.subtractionLogDAO = db.subtractionLogDAO();
         this.multiplicationLogDAO = db.multiplicationLogDAO();
         this.divisionLogDAO = db.divisionLogDAO();
+        this.userDAO = db.userDAO();
         this.allLogs = (ArrayList<AdditionLog>) this.additionLogDAO.getAdditionRecords();
     }
 
@@ -97,6 +100,14 @@ public class AdditionLogRepository {
         {
             divisionLogDAO.insert(divisionLog);
         }
+        );
+    }
+
+    public void insertUser(User... user) {
+        AdditionLogDatabase.databaseWriteExecutor.execute(() ->
+                {
+                    userDAO.insert(user);
+                }
         );
     }
 
