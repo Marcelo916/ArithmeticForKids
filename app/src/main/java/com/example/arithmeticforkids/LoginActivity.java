@@ -59,7 +59,12 @@ public class LoginActivity extends AppCompatActivity {
                     //SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
                     //sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, user.getId());
                     //sharedPrefEditor.apply();
-                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                    if(user.isAdmin()) {
+                        startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+                    } else {
+                        startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                    }
+                    //startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
                 } else {
                     toastMaker("Invalid password!");
                     binding.password.setSelection(0);

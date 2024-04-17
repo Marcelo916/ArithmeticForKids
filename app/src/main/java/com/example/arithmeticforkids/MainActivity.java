@@ -61,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         binding.divisionButton.setOnClickListener(buttonClickLister);
     }
 
-    private void loginUser(Bundle savedInstanceState) {
+    public void loginUser(Bundle savedInstanceState) {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
