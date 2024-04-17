@@ -3,7 +3,9 @@ package com.example.arithmeticforkids;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -11,18 +13,28 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityMainBinding;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final String MAIN_ACTIVITY_USER_ID = "com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
+    static final String SHARED_PREFERENCE_USERID_KEY = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_KEY";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.arithmeticforkids.SAVED_INSTANCE_STATE_USERID_KEY";
+    static final String SHARED_PREFERENCE_USERID_VALUE = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_VALUE";
+    private static final int LOGGED_OUT = -1;
     ActivityMainBinding binding;
-    private int loggedInUserId = -1;
+    private AdditionLogRepository repository;
     public static final String TAG = "DAC_APPLOG";
+    private int loggedInUserId = -1;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,14 +42,17 @@ public class MainActivity extends AppCompatActivity {
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
-        loginUser();
+        repository = AdditionLogRepository.getRepository(getApplication());
+        loginUser(savedInstanceState);
 
-        invalidateOptionsMenu();
+        //invalidateOptionsMenu();
 
         if(loggedInUserId == -1) {
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
         }
+
+        //repository = AdditionLogRepository.getRepository(getApplication());
 
         //Setting click listeners for all buttons
         binding.additionButton.setOnClickListener(buttonClickLister);
@@ -46,9 +61,41 @@ public class MainActivity extends AppCompatActivity {
         binding.divisionButton.setOnClickListener(buttonClickLister);
     }
 
-    private void loginUser() {
-        //TODO: create login method
-        loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, -1);
+    private void loginUser(Bundle savedInstanceState) {
+        //check shared preference for logged in user
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+
+        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+            loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
+        }
+        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+        if(loggedInUserId == LOGGED_OUT) {
+            loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
+        userObserver.observe(this, user ->{
+            this.user = user;
+            if(this.user != null) {
+                invalidateOptionsMenu();
+            } else {
+              //  logout();
+            }
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, loggedInUserId);
+        sharedPrefEditor.apply();
     }
 
     @Override
@@ -62,7 +109,10 @@ public class MainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Marcelo");
+        if(user == null) {
+            return false;
+        }
+        item.setTitle(user.getUsername()); // Here is the bug
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -97,7 +147,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void logout() {
-        //TODO: Finish logout method
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCE_USERID_KEY, LOGGED_OUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
 

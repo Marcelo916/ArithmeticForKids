@@ -3,6 +3,8 @@ package com.example.arithmeticforkids.database;
 import android.app.Application;
 import android.util.Log;
 
+import androidx.lifecycle.LiveData;
+
 import com.example.arithmeticforkids.MainActivity;
 import com.example.arithmeticforkids.database.entities.AdditionLog;
 import com.example.arithmeticforkids.database.entities.DivisionLog;
@@ -154,5 +156,26 @@ public class AdditionLogRepository {
             Log.i(MainActivity.TAG, "Problem when getting all DivisionLogs in the repository");
         }
         return null;
+    }
+
+    public LiveData<User> getUserByUserName(String username) {
+        return userDAO.getUserByUserName(username);
+        /**Future<User> future = AdditionLogDatabase.databaseWriteExecutor.submit(new Callable<User>() {
+            @Override
+            public User call() throws Exception {
+                return userDAO.getUserByUserName(username);
+            }
+        });
+        try {
+            future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting user by Username");
+        }
+        return null;*/
+    }
+
+
+    public LiveData<User> getUserByUserId(int userId) {
+        return userDAO.getUserByUserId(userId);
     }
 }
