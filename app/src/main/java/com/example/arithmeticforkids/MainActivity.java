@@ -168,19 +168,19 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(v == binding.additionButton) {
-                Intent intent = Addition.additionFactory(getApplicationContext());
+                Intent intent = Addition.additionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "addition");
                 startActivity(intent);
             } else if (v == binding.subtractionButton) {
-                Intent intent = Subtraction.subtractionFactory(getApplicationContext());
+                Intent intent = Subtraction.subtractionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "subtraction");
                 startActivity(intent);
             } else if (v == binding.multiplicationButton) {
-                Intent intent = Multiplication.multiplicationFactory(getApplicationContext());
+                Intent intent = Multiplication.multiplicationFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "multiplication");
                 startActivity(intent);
             } else if (v == binding.divisionButton) {
-                Intent intent = Division.divisionFactory(getApplicationContext());
+                Intent intent = Division.divisionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "division");
                 startActivity(intent);
             }

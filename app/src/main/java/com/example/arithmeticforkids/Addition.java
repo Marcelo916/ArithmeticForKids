@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.util.Log;
@@ -19,10 +20,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.AdditionLog;
+import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdditionBinding;
 
 import java.util.ArrayList;
@@ -30,15 +33,22 @@ import java.util.Locale;
 
 
 public class Addition extends AppCompatActivity {
+
+    private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
+    static final String SHARED_PREFERENCE_USERID_KEY = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_KEY";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.arithmeticforkids.SAVED_INSTANCE_STATE_USERID_KEY";
+    static final String SHARED_PREFERENCE_USERID_VALUE = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_VALUE";
+    private static final int LOGGED_OUT = -1;
     ActivityAdditionBinding binding;
     private AdditionLogRepository repository;
+    private int loggedInUserId = -1;
+    private User user;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
     ProgressBar timer;
 
     //TODO: Add login information
-    int loggedInUserId = -1;
     //private boolean isAdmin;
     //private LoginActivity loginActivity = new LoginActivity();
 
@@ -79,6 +89,18 @@ public class Addition extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         repository = AdditionLogRepository.getRepository(getApplication());
+        loginUserAddition(savedInstanceState);
+
+        /**if(loggedInUserId == -1) {
+            Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
+            //Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
+            startActivity(intent);
+        }*/
+        /**if(user.isAdmin()) {
+            startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+        } else {
+            startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+        }*/
 
         goButton = findViewById(R.id.startAction);
         answerA = findViewById(R.id.answerA);
@@ -153,9 +175,15 @@ public class Addition extends AppCompatActivity {
                 //finish();
                 //TODO: Here is the bug "You should check if the user is Admin or not" then go back to the respective factory
                 //Intent intent = AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), 0);
-                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
+                /**Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
-                finish();
+                finish();*/
+
+                if(user.isAdmin()) {
+                    startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+                } else {
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                }
 
                 /**Intent intent;
                 if (isAdmin == -1) {
@@ -189,8 +217,47 @@ public class Addition extends AppCompatActivity {
         bottom.setText(game.getCorrect() + "/" + (game.getTotalQuestions() - 1));
     }
 
-    public static Intent additionFactory(Context context) {
+
+    public void loginUserAddition(Bundle savedInstanceState) {
+        //check shared preference for logged in user
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+
+        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+            loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
+        }
+        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+        if(loggedInUserId == LOGGED_OUT) {
+            loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
+        userObserver.observe(this, user ->{
+            this.user = user;
+            if(this.user != null) {
+                invalidateOptionsMenu();
+            } else {
+                //  logout();
+            }
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, loggedInUserId);
+        sharedPrefEditor.apply();
+    }
+
+    public static Intent additionFactory(Context context, int userId) {
         Intent intent = new Intent(context, Addition.class);
+        intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
@@ -205,7 +272,10 @@ public class Addition extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Marcelo");
+        if(user == null) {
+            return false;
+        }
+        item.setTitle(user.getUsername()); // Here is the bug
 
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -243,7 +313,13 @@ public class Addition extends AppCompatActivity {
     }
 
     private void logoutAddition() {
-        //TODO: Finish logout method
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCE_USERID_KEY, LOGGED_OUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
 

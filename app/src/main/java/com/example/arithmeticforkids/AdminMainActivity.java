@@ -162,19 +162,19 @@ public class AdminMainActivity extends AppCompatActivity {
         @Override
         public void onClick(View v) {
             if(v == binding.AdminAdditionButton) {
-                Intent intent = Addition.additionFactory(getApplicationContext());
+                Intent intent = Addition.additionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "addition");
                 startActivity(intent);
             } else if (v == binding.AdminSubtractionButton) {
-                Intent intent = Subtraction.subtractionFactory(getApplicationContext());
+                Intent intent = Subtraction.subtractionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "subtraction");
                 startActivity(intent);
             } else if (v == binding.AdminMultiplicationButton) {
-                Intent intent = Multiplication.multiplicationFactory(getApplicationContext());
+                Intent intent = Multiplication.multiplicationFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "multiplication");
                 startActivity(intent);
             } else if (v == binding.AdminDivisionButton) {
-                Intent intent = Division.divisionFactory(getApplicationContext());
+                Intent intent = Division.divisionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "division");
                 startActivity(intent);
             }

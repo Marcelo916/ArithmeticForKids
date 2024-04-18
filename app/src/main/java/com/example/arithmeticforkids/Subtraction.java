@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -17,22 +18,30 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.SubtractionLog;
+import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivitySubtractionBinding;
 
 import java.util.ArrayList;
 
 public class Subtraction extends AppCompatActivity {
+    private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
+    static final String SHARED_PREFERENCE_USERID_KEY = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_KEY";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.arithmeticforkids.SAVED_INSTANCE_STATE_USERID_KEY";
+    static final String SHARED_PREFERENCE_USERID_VALUE = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_VALUE";
+    private static final int LOGGED_OUT = -1;
     ActivitySubtractionBinding binding;
     private AdditionLogRepository repository;
+    private int loggedInUserId = -1;
+    private User user;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
-
     ProgressBar timer;
-    int loggedInUserId = -1;
+    //int loggedInUserId = -1;
 
     Game game = new Game("subtraction");
     int secondsRemaining = 30;
@@ -70,6 +79,7 @@ public class Subtraction extends AppCompatActivity {
         setContentView(binding.getRoot());
 
         repository = AdditionLogRepository.getRepository(getApplication());
+        loginUserSubtraction(savedInstanceState);
 
         goButton = findViewById(R.id.startActionSubtraction);
         answerA = findViewById(R.id.answerASubtraction);
@@ -137,9 +147,14 @@ public class Subtraction extends AppCompatActivity {
                 //Intent intent = new Intent(Subtraction.this, MainActivity.class);
                 //startActivity(intent);
                 //finish();
-                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
+                /**Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
                 startActivity(intent);
-                finish();
+                finish();*/
+                if(user.isAdmin()) {
+                    startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+                } else {
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                }
             }
         });
         /**super.onCreate(savedInstanceState); This was the previous code. I am keeping it just in case I need to look at it
@@ -176,8 +191,46 @@ public class Subtraction extends AppCompatActivity {
         bottom.setText(game.getCorrect() + "/" + (game.getTotalQuestions() - 1));
     }
 
-    public static Intent subtractionFactory(Context context) {
+    public void loginUserSubtraction(Bundle savedInstanceState) {
+        //check shared preference for logged in user
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+
+        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+            loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
+        }
+        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+        if(loggedInUserId == LOGGED_OUT) {
+            loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
+        userObserver.observe(this, user ->{
+            this.user = user;
+            if(this.user != null) {
+                invalidateOptionsMenu();
+            } else {
+                //  logout();
+            }
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, loggedInUserId);
+        sharedPrefEditor.apply();
+    }
+
+    public static Intent subtractionFactory(Context context, int userId) {
         Intent intent = new Intent(context, Subtraction.class);
+        intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
@@ -192,7 +245,10 @@ public class Subtraction extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Marcelo");
+        if(user == null) {
+            return false;
+        }
+        item.setTitle(user.getUsername());
 
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -228,7 +284,13 @@ public class Subtraction extends AppCompatActivity {
     }
 
     private void logoutSubtraction() {
-        //TODO: Finish logout method
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCE_USERID_KEY, LOGGED_OUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
 
