@@ -52,16 +52,12 @@ public class AdminTools extends AppCompatActivity {
         repository = AdditionLogRepository.getRepository(getApplication());
         loginUserAdminTools(savedInstanceState);
 
-        TextView UserListDisplay = findViewById(R.id.UserListDisplayWindow); //todo: implement display
-        LiveData<List<User>> UserLogList; //todo: check if correct
-//      Button ShowUsersButtonAdminTools = findViewById(R.id.ShowUsersButtonAdminTools); //todo: button that displays list of all users from database, probably redundant
-
-        /**binding.ShowUsersButtonAdminTools.setOnClickListener(new View.OnClickListener() {
+        binding.ShowUsersButtonAdminTools.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                refreshDisplay();
             }
-        });**/
+        });
 
         binding.goBackButtonAdminTools.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -69,17 +65,17 @@ public class AdminTools extends AppCompatActivity {
                 startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
             }
         });
-//        UserListDisplay.setText("test"); //testing UserListDisplay
-        refreshDisplay(); //todo: implement display
     }
 
     private void refreshDisplay(){
-//        UserLogList = repository.getAllUsers(); //todo: check if this method works as intended
-//        if(!UserLogList.toString().isEmpty()){
-//            UserListDisplay.setText(UserLogList.toString());
-//        }else{
-//            UserListDisplay.setText(R.string.no_users_message);
-//        }
+        TextView UserListDisplay = findViewById(R.id.UserListDisplayWindow);
+        LiveData<List<User>> UserLogList;
+        UserLogList = repository.getAllUsers();
+        if(!UserLogList.toString().isEmpty()){
+            UserListDisplay.setText(UserLogList.toString()); //todo: figure out how to return list data instead of object name
+        }else{
+            UserListDisplay.setText(R.string.no_users_message);
+        }
     }
 
     public void loginUserAdminTools(Bundle savedInstanceState) {
