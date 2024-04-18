@@ -32,4 +32,5 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="admin_tools_name">Admin Tools</string>
     <string name="display_users">Display Users</string>
+    <string name="no_users_message">No users found.</string>
 </resources>
