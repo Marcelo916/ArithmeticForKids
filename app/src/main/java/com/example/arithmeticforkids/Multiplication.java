@@ -43,7 +43,6 @@ public class Multiplication extends AppCompatActivity {
     TextView left, right, middle, bottom;
 
     ProgressBar timer;
-    //int loggedInUserId = -1;
 
     Game game = new Game("multiplication");
     int secondsRemaining = 30;
@@ -146,13 +145,7 @@ public class Multiplication extends AppCompatActivity {
         binding.goBackButtonMultiplication.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Multiplication.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                /**Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                startActivity(intent);
-                finish();*/
-                if(user.isAdmin()) {
+                if (user.isAdmin()) {
                     startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
                 } else {
                     startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
@@ -165,7 +158,7 @@ public class Multiplication extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void nextTurn() {
         game.newQuestion();
-        int [] answer = game.getCurrentQuestion().getStoredNumbers();
+        int[] answer = game.getCurrentQuestion().getStoredNumbers();
 
         answerA.setText(Integer.toString(answer[0]));
         answerB.setText(Integer.toString(answer[1]));
@@ -185,25 +178,23 @@ public class Multiplication extends AppCompatActivity {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
             loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
             loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT) {
+        if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
         if (loggedInUserId == LOGGED_OUT) {
             return;
         }
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
-        userObserver.observe(this, user ->{
+        userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null) {
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            } else {
-                //  logout();
             }
         });
     }
@@ -236,7 +227,7 @@ public class Multiplication extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
         item.setTitle(user.getUsername());
@@ -272,7 +263,8 @@ public class Multiplication extends AppCompatActivity {
             }
         });
 
-        alertBuilder.create().show();;
+        alertBuilder.create().show();
+        ;
     }
 
 
@@ -287,7 +279,7 @@ public class Multiplication extends AppCompatActivity {
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
 
-    private void insertMultiplicationRecord(){
+    private void insertMultiplicationRecord() {
         MultiplicationLog log = new MultiplicationLog(game.getScore(), loggedInUserId);
         repository.insertMultiplicationLog(log);
     }
@@ -296,7 +288,7 @@ public class Multiplication extends AppCompatActivity {
         ArrayList<MultiplicationLog> allLogsMultiplication = repository.getAllLogsMultiplication();
 
         StringBuilder sb = new StringBuilder();
-        for(MultiplicationLog log : allLogsMultiplication) {
+        for (MultiplicationLog log : allLogsMultiplication) {
             sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
             sb.append(log);
         }

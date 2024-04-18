@@ -15,20 +15,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.DivisionLog;
 import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityDivisionBinding;
-import com.example.arithmeticforkids.databinding.ActivityMultiplicationBinding;
 
 import java.util.ArrayList;
 
@@ -48,7 +43,6 @@ public class Division extends AppCompatActivity {
     TextView left, right, middle, bottom;
 
     ProgressBar timer;
-    //int loggedInUserId = -1;
 
     Game game = new Game("division");
     int secondsRemaining = 30;
@@ -149,14 +143,7 @@ public class Division extends AppCompatActivity {
         binding.goBackButtonDivision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Division.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                /**Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                startActivity(intent);
-                finish();*/
-
-                if(user.isAdmin()) {
+                if (user.isAdmin()) {
                     startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
                 } else {
                     startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
@@ -169,7 +156,7 @@ public class Division extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void nextTurn() {
         game.newQuestion();
-        int [] answer = game.getCurrentQuestion().getStoredNumbers();
+        int[] answer = game.getCurrentQuestion().getStoredNumbers();
 
         answerA.setText(Integer.toString(answer[0]));
         answerB.setText(Integer.toString(answer[1]));
@@ -189,25 +176,23 @@ public class Division extends AppCompatActivity {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
             loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
             loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT) {
+        if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
         if (loggedInUserId == LOGGED_OUT) {
             return;
         }
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
-        userObserver.observe(this, user ->{
+        userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null) {
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            } else {
-                //  logout();
             }
         });
     }
@@ -239,7 +224,7 @@ public class Division extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
         item.setTitle(user.getUsername());
@@ -276,7 +261,8 @@ public class Division extends AppCompatActivity {
             }
         });
 
-        alertBuilder.create().show();;
+        alertBuilder.create().show();
+        ;
     }
 
 
@@ -300,7 +286,7 @@ public class Division extends AppCompatActivity {
         ArrayList<DivisionLog> allLogsDivision = repository.getAllLogsDivision();
 
         StringBuilder sb = new StringBuilder();
-        for(DivisionLog log : allLogsDivision) {
+        for (DivisionLog log : allLogsDivision) {
             sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
             sb.append(log);
         }

@@ -10,13 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
@@ -43,8 +39,7 @@ public class AdminMainActivity extends AppCompatActivity {
         repository = AdditionLogRepository.getRepository(getApplication());
         loginUserAdmin(savedInstanceState);
 
-
-        if(loggedInUserId == -1) {
+        if (loggedInUserId == -1) {
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
         }
@@ -60,25 +55,23 @@ public class AdminMainActivity extends AppCompatActivity {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
             loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
             loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT) {
+        if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
         if (loggedInUserId == LOGGED_OUT) {
             return;
         }
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
-        userObserver.observe(this, user ->{
+        userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null) {
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            } else {
-                //  logout();
             }
         });
     }
@@ -103,10 +96,10 @@ public class AdminMainActivity extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
-        item.setTitle(user.getUsername()); // Here is the bug
+        item.setTitle(user.getUsername());
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(@NonNull MenuItem item) {
@@ -161,7 +154,7 @@ public class AdminMainActivity extends AppCompatActivity {
     private final View.OnClickListener buttonClickLister = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if(v == binding.AdminAdditionButton) {
+            if (v == binding.AdminAdditionButton) {
                 Intent intent = Addition.additionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "addition");
                 startActivity(intent);

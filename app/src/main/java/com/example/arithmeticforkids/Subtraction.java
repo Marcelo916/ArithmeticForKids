@@ -41,7 +41,6 @@ public class Subtraction extends AppCompatActivity {
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
     ProgressBar timer;
-    //int loggedInUserId = -1;
 
     Game game = new Game("subtraction");
     int secondsRemaining = 30;
@@ -144,38 +143,20 @@ public class Subtraction extends AppCompatActivity {
         binding.goBackButtonSubtraction.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Subtraction.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                /**Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                startActivity(intent);
-                finish();*/
-                if(user.isAdmin()) {
+                if (user.isAdmin()) {
                     startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
                 } else {
                     startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
                 }
             }
         });
-        /**super.onCreate(savedInstanceState); This was the previous code. I am keeping it just in case I need to look at it
-        binding = ActivitySubtractionBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-
-        binding.goBackButtonSubtraction.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(Subtraction.this, MainActivity.class);
-                startActivity(intent);
-                finish();
-            }
-        });*/
 
     }
 
     @SuppressLint("SetTextI18n")
     public void nextTurn() {
         game.newQuestion();
-        int [] answer = game.getCurrentQuestion().getStoredNumbers();
+        int[] answer = game.getCurrentQuestion().getStoredNumbers();
 
         answerA.setText(Integer.toString(answer[0]));
         answerB.setText(Integer.toString(answer[1]));
@@ -195,25 +176,23 @@ public class Subtraction extends AppCompatActivity {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
             loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
             loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT) {
+        if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
         if (loggedInUserId == LOGGED_OUT) {
             return;
         }
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
-        userObserver.observe(this, user ->{
+        userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null) {
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            } else {
-                //  logout();
             }
         });
     }
@@ -245,7 +224,7 @@ public class Subtraction extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
         item.setTitle(user.getUsername());
@@ -280,7 +259,8 @@ public class Subtraction extends AppCompatActivity {
             }
         });
 
-        alertBuilder.create().show();;
+        alertBuilder.create().show();
+        ;
     }
 
     private void logoutSubtraction() {
@@ -305,7 +285,7 @@ public class Subtraction extends AppCompatActivity {
         ArrayList<SubtractionLog> allLogsSubtraction = repository.getAllLogsSubtraction();
 
         StringBuilder sb = new StringBuilder();
-        for(SubtractionLog log : allLogsSubtraction) {
+        for (SubtractionLog log : allLogsSubtraction) {
             sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
             sb.append(log);
         }

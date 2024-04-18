@@ -33,7 +33,7 @@ public class Question {
             this.firstNumber = randomNumber.nextInt(10) * this.secondNumber;// This equation is for simplicity purposes.
             this.answer = this.firstNumber / this.secondNumber;
             this.userPrompt = this.firstNumber + " ÷ " + this.secondNumber + " = ";
-        }else {
+        } else {
             // Default to addition if operation is not specified or invalid
             this.firstNumber = randomNumber.nextInt(maxLimit);
             this.secondNumber = randomNumber.nextInt(maxLimit);
@@ -53,30 +53,6 @@ public class Question {
         this.storedNumbers = restoredNumbers(this.storedNumbers);
 
         storedNumbers[answerIndex] = answer;
-
-        // Generate answer options for multiple-choice questions
-        /**this.storedNumbers = new int[]{0, 1, 2, 3};
-        this.answerIndex = randomNumber.nextInt(4); // Randomly select index for correct answer
-        this.storedNumbers[answerIndex] = answer; // Set correct answer at correct index
-        this.storedNumbers = restoredNumbers(this.storedNumbers);*/
-
-        /**this.firstNumber = randomNumber.nextInt(maxLimit); This was the previous code. Keeping it just in case
-        this.secondNumber = randomNumber.nextInt(maxLimit);
-        this.answer = this.firstNumber + this.secondNumber;
-        this.userPrompt = firstNumber + " + " + secondNumber + " = ";
-
-        this.answerIndex = randomNumber.nextInt(4);
-
-        this.storedNumbers = new int[]{0, 1, 2, 3};
-
-        this.storedNumbers[0] = answer + 1;
-        this.storedNumbers[1] = answer + 7;
-        this.storedNumbers[2] = answer - 2;
-        this.storedNumbers[3] = answer - 5;
-
-        this.storedNumbers = restoredNumbers(this.storedNumbers);
-
-        storedNumbers[answerIndex] = answer;*/
     }
 
     private int[] restoredNumbers(int[] array) {

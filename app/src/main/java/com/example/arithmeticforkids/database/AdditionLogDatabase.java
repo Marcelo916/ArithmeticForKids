@@ -35,13 +35,14 @@ public abstract class AdditionLogDatabase extends RoomDatabase {
     private static volatile AdditionLogDatabase INSTANCE;
     private static final int NUMBER_OF_THREADS = 4;
     static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
+
     static AdditionLogDatabase getDatabase(final Context context) {
-        if(INSTANCE == null) {
+        if (INSTANCE == null) {
             synchronized (AdditionLogDatabase.class) {
-                if(INSTANCE == null) {
+                if (INSTANCE == null) {
                     INSTANCE = Room.databaseBuilder(
-                            context.getApplicationContext(),
-                            AdditionLogDatabase.class,
+                                    context.getApplicationContext(),
+                                    AdditionLogDatabase.class,
                                     DATABASE_NAME
                             )
                             .fallbackToDestructiveMigration()

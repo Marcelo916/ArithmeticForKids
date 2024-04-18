@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -29,7 +27,6 @@ import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdditionBinding;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 
 public class Addition extends AppCompatActivity {
@@ -47,10 +44,6 @@ public class Addition extends AppCompatActivity {
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
     ProgressBar timer;
-
-    //TODO: Add login information
-    //private boolean isAdmin;
-    //private LoginActivity loginActivity = new LoginActivity();
 
     Game game = new Game("addition");
     int secondsRemaining = 30;
@@ -91,17 +84,6 @@ public class Addition extends AppCompatActivity {
         repository = AdditionLogRepository.getRepository(getApplication());
         loginUserAddition(savedInstanceState);
 
-        /**if(loggedInUserId == -1) {
-            Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId());
-            //Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
-            startActivity(intent);
-        }*/
-        /**if(user.isAdmin()) {
-            startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
-        } else {
-            startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
-        }*/
-
         goButton = findViewById(R.id.startAction);
         answerA = findViewById(R.id.answerA);
         answerB = findViewById(R.id.answerB);
@@ -135,7 +117,6 @@ public class Addition extends AppCompatActivity {
 
                 secondsRemaining = 30;
                 game = new Game("addition");
-                //insertAdditionRecord();
                 nextTurn();
                 right.setText(Integer.toString(game.getScore()) + "pts");
                 clock.start();
@@ -165,33 +146,16 @@ public class Addition extends AppCompatActivity {
         answerD.setOnClickListener(answerClickListener);
 
 
-        //int isAdmin = loginActivity.verifyUser();
-
         binding.goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Addition.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                //TODO: Here is the bug "You should check if the user is Admin or not" then go back to the respective factory
-                //Intent intent = AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), 0);
-                /**Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                startActivity(intent);
-                finish();*/
 
-                if(user.isAdmin()) {
+                if (user.isAdmin()) {
                     startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
                 } else {
                     startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
                 }
 
-                /**Intent intent;
-                if (isAdmin == -1) {
-                    intent = new Intent(Addition.this, AdminMainActivity.class);
-                } else {
-                    intent = new Intent(Addition.this, MainActivity.class);
-                }
-                startActivity(intent);*/
             }
         });
 
@@ -201,7 +165,7 @@ public class Addition extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void nextTurn() {
         game.newQuestion();
-        int [] answer = game.getCurrentQuestion().getStoredNumbers();
+        int[] answer = game.getCurrentQuestion().getStoredNumbers();
 
         answerA.setText(Integer.toString(answer[0]));
         answerB.setText(Integer.toString(answer[1]));
@@ -222,25 +186,23 @@ public class Addition extends AppCompatActivity {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
-        if(sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
             loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
             loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
         }
-        if(loggedInUserId == LOGGED_OUT) {
+        if (loggedInUserId == LOGGED_OUT) {
             loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
         }
         if (loggedInUserId == LOGGED_OUT) {
             return;
         }
         LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
-        userObserver.observe(this, user ->{
+        userObserver.observe(this, user -> {
             this.user = user;
-            if(this.user != null) {
+            if (this.user != null) {
                 invalidateOptionsMenu();
-            } else {
-                //  logout();
             }
         });
     }
@@ -272,10 +234,10 @@ public class Addition extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        if(user == null) {
+        if (user == null) {
             return false;
         }
-        item.setTitle(user.getUsername()); // Here is the bug
+        item.setTitle(user.getUsername());
 
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -335,18 +297,11 @@ public class Addition extends AppCompatActivity {
         ArrayList<AdditionLog> allLogs = repository.getAllLogs();
 
         StringBuilder sb = new StringBuilder();
-        for(AdditionLog log : allLogs) {
+        for (AdditionLog log : allLogs) {
             sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
             sb.append(log);
         }
         bottom.setText(sb.toString());
-        //right.setText(Integer.toString(game.getScore()) + "pts");
-
-
-        //String currentInfo = binding.textViewRight.getText().toString();
-        //Log.d(MainActivity.TAG, "Current info: " + currentInfo);
-        //String newDisplay = String.format(Locale.US, "")
-        //Log.i(MainActivity.TAG, repository.getAllLogs().toString());
     }
 
 }

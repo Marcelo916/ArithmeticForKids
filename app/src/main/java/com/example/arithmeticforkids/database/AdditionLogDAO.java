@@ -7,7 +7,6 @@ import androidx.room.Query;
 
 import com.example.arithmeticforkids.database.entities.AdditionLog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao

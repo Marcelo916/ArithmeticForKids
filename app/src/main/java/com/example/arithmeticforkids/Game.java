@@ -32,7 +32,7 @@ public class Game {
 
     public boolean checkAnswer(int submittedAnswer) {
         boolean isCorrect;
-        if(currentQuestion.getAnswer() == submittedAnswer) {
+        if (currentQuestion.getAnswer() == submittedAnswer) {
             correct++;
             isCorrect = true;
         } else {

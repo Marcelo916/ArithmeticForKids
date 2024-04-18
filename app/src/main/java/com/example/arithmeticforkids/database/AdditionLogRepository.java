@@ -37,7 +37,7 @@ public class AdditionLogRepository {
     }
 
     public static AdditionLogRepository getRepository(Application application) {
-        if(repository != null) {
+        if (repository != null) {
             return repository;
         }
         Future<AdditionLogRepository> future = AdditionLogDatabase.databaseWriteExecutor.submit(
@@ -65,8 +65,8 @@ public class AdditionLogRepository {
                     }
                 }
         );
-        try{
-            return  future.get();
+        try {
+            return future.get();
         } catch (InterruptedException | ExecutionException e) {
             Log.i(MainActivity.TAG, "Problem when getting all AdditionLogs in the repository");
         }
@@ -91,17 +91,17 @@ public class AdditionLogRepository {
 
     public void insertMultiplicationLog(MultiplicationLog multiplicationLog) {
         AdditionLogDatabase.databaseWriteExecutor.execute(() ->
-        {
-            multiplicationLogDAO.insert(multiplicationLog);
-        }
+                {
+                    multiplicationLogDAO.insert(multiplicationLog);
+                }
         );
     }
 
     public void insertDivisionLog(DivisionLog divisionLog) {
         AdditionLogDatabase.databaseWriteExecutor.execute(() ->
-        {
-            divisionLogDAO.insert(divisionLog);
-        }
+                {
+                    divisionLogDAO.insert(divisionLog);
+                }
         );
     }
 
@@ -160,18 +160,6 @@ public class AdditionLogRepository {
 
     public LiveData<User> getUserByUserName(String username) {
         return userDAO.getUserByUserName(username);
-        /**Future<User> future = AdditionLogDatabase.databaseWriteExecutor.submit(new Callable<User>() {
-            @Override
-            public User call() throws Exception {
-                return userDAO.getUserByUserName(username);
-            }
-        });
-        try {
-            future.get();
-        } catch (InterruptedException | ExecutionException e) {
-            Log.i(MainActivity.TAG, "Problem when getting user by Username");
-        }
-        return null;*/
     }
 
 

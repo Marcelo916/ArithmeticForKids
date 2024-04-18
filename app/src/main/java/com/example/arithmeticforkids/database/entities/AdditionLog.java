@@ -6,10 +6,7 @@ import androidx.room.PrimaryKey;
 
 import com.example.arithmeticforkids.database.AdditionLogDatabase;
 
-import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
-//import java.util.Date;
-import java.util.Locale;
 import java.util.Objects;
 
 @Entity(tableName = AdditionLogDatabase.ADDITION_LOG_TABLE)
@@ -19,24 +16,19 @@ public class AdditionLog {
     private int id;
     private int bestScore;
     private LocalDateTime date;
-    //private Date date;
 
     private int userId;
 
     public AdditionLog(int bestScore, int userId) {
         this.bestScore = bestScore;
         this.userId = userId;
-        //date = new Date();
         date = LocalDateTime.now();
     }
 
     @NonNull
     @Override
     public String toString() {
-        //SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss", Locale.getDefault());
-        //String formattedDate = dateFormat.format(date);
         return "Your all-time best score is: " + bestScore;
-
     }
 
     @Override
