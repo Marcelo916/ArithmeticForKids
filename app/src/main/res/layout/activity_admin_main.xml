@@ -94,7 +94,7 @@
         android:backgroundTint="@color/purple"
         android:textColor="@android:color/white"/>
     <Button
-        android:id="@+id/AdminTools"
+        android:id="@+id/AdminToolsButton"
         android:layout_width="200dp"
         android:layout_height="50dp"
         android:layout_marginTop="5dp"
