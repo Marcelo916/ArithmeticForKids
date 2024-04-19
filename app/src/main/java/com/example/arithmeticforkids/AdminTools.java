@@ -4,22 +4,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
-import androidx.lifecycle.Observer;
-import androidx.lifecycle.Transformations;
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdminToolsBinding;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class AdminTools extends AppCompatActivity {
     private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
@@ -33,7 +25,7 @@ public class AdminTools extends AppCompatActivity {
     private int loggedInUserId = -1;
     private User user;
 
-    List<String> userList = new ArrayList<>();
+//    List<String> userList = new ArrayList<>();
 
     //todo: finish UserListDisplay so it outputs the contents of repository.GetAllUsers() and updates during onCreate() or when a user is deleted
     //todo: hook up spinner to list provided by getAllUsers(). https://developer.android.com/develop/ui/views/components/spinner
@@ -58,19 +50,9 @@ public class AdminTools extends AppCompatActivity {
         repository = AdditionLogRepository.getRepository(getApplication());
         loginUserAdminTools(savedInstanceState);
 
-        binding.ShowUsersButtonAdminTools.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                refreshDisplay();
-            }
-        });
+        binding.ShowUsersButtonAdminTools.setOnClickListener(v -> refreshDisplay());
 
-        binding.goBackButtonAdminTools.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
-            }
-        });
+        binding.goBackButtonAdminTools.setOnClickListener(v -> startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId())));
     }
 
     private void refreshDisplay(){
@@ -78,18 +60,19 @@ public class AdminTools extends AppCompatActivity {
 //        LiveData<List<User>> UserLogList = repository.getAllUsers();
 //        List<String> userList = new ArrayList<>();
 //        LiveData<List<String>> UserLogListString = Transformations.map(repository.getAllUsers(),
-        repository.getAllUsers().observe(this, userList->{ //I'm seriously at my wits end here. I got the list but IT'S STILL OBJECT IDs
-            StringBuilder stringBuilder = new StringBuilder(); //I can't figure out how to convert to LiveData<List<String>> and observe it
+        repository.getAllUsers().observe(this, userList->{
+            StringBuilder stringBuilder = new StringBuilder();
             for (User user : userList) {
-                stringBuilder.append(user.toString()).append("\n");
+//                stringBuilder.append(user.toString()).append("\n");
+                stringBuilder.append(user.getUsername()).append("\n"); //IT WORKS!
             }
             String usersString = stringBuilder.toString();
 //            this.userList.addAll(userList);
-        /**List<String> usersList = new ArrayList<>(); //temporary solution because i can't figure out how to call the actual usernames from the database
-        usersList.add("admin1");
-        usersList.add("testuser1");**/
+//        List<String> usersList = new ArrayList<>(); //temporary solution because i can't figure out how to call the actual usernames from the database
+//        usersList.add("admin1");
+//        usersList.add("testuser1");
         if(!usersString.isEmpty()){
-            UserListDisplay.setText(usersString); //todo: figure out how to return list data instead of object name: "admin1, exampleuser1"
+            UserListDisplay.setText(usersString);
         }else{
             UserListDisplay.setText(R.string.no_users_message);
         }
