@@ -33,4 +33,5 @@
     <string name="admin_tools_name">Admin Tools</string>
     <string name="display_users">Display Users</string>
     <string name="no_users_message">No users found.</string>
+    <string name="press_the_button_to_load">Press the button to load</string>
 </resources>
