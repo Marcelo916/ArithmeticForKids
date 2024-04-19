@@ -2,6 +2,7 @@ package com.example.arithmeticforkids;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class Game {
     private List<Question> questions;
@@ -43,6 +44,19 @@ public class Game {
         return isCorrect;
     }
 
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Game)) return false;
+        Game game = (Game) o;
+        return getCorrect() == game.getCorrect() && getIncorrect() == game.getIncorrect() && getTotalQuestions() == game.getTotalQuestions() && getScore() == game.getScore() && Objects.equals(getQuestions(), game.getQuestions()) && Objects.equals(getCurrentQuestion(), game.getCurrentQuestion()) && Objects.equals(operation, game.operation);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getQuestions(), getCorrect(), getIncorrect(), getTotalQuestions(), getScore(), getCurrentQuestion(), operation);
+    }
 
     public List<Question> getQuestions() {
         return questions;

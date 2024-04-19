@@ -1,5 +1,7 @@
 package com.example.arithmeticforkids;
 
+import java.util.Arrays;
+import java.util.Objects;
 import java.util.Random;
 
 public class Question {
@@ -66,6 +68,21 @@ public class Question {
             array[i] = temp;
         }
         return array;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Question)) return false;
+        Question question = (Question) o;
+        return getFirstNumber() == question.getFirstNumber() && getSecondNumber() == question.getSecondNumber() && getAnswer() == question.getAnswer() && getAnswerIndex() == question.getAnswerIndex() && getMaxLimit() == question.getMaxLimit() && Arrays.equals(getStoredNumbers(), question.getStoredNumbers()) && Objects.equals(getUserPrompt(), question.getUserPrompt());
+    }
+
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(getFirstNumber(), getSecondNumber(), getAnswer(), getAnswerIndex(), getMaxLimit(), getUserPrompt());
+        result = 31 * result + Arrays.hashCode(getStoredNumbers());
+        return result;
     }
 
     public int getFirstNumber() {
