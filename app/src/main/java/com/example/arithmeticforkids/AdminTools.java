@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.method.ScrollingMovementMethod;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -27,10 +28,6 @@ public class AdminTools extends AppCompatActivity {
 
 //    List<String> userList = new ArrayList<>();
 
-    //todo: finish UserListDisplay so it outputs the contents of repository.GetAllUsers() and updates during onCreate() or when a user is deleted
-    //todo: hook up spinner to list provided by getAllUsers(). https://developer.android.com/develop/ui/views/components/spinner
-    //todo: make a button to delete a user that is selected in the spinner
-
     //todo: implement the settings panel so the user can log out in this activity?
 
 
@@ -53,6 +50,9 @@ public class AdminTools extends AppCompatActivity {
         binding.ShowUsersButtonAdminTools.setOnClickListener(v -> refreshDisplay());
 
         binding.goBackButtonAdminTools.setOnClickListener(v -> startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId())));
+
+        TextView textView = findViewById(R.id.UserListDisplayWindow);
+        textView.setMovementMethod(new ScrollingMovementMethod());
     }
 
     private void refreshDisplay(){
@@ -63,8 +63,27 @@ public class AdminTools extends AppCompatActivity {
         repository.getAllUsers().observe(this, userList->{
             StringBuilder stringBuilder = new StringBuilder();
             for (User user : userList) {
-//                stringBuilder.append(user.toString()).append("\n");
-                stringBuilder.append(user.getUsername()).append("\n"); //IT WORKS!
+                stringBuilder.append("User: ").append(user.getUsername()).append(" ID: ").append(user.getId()).append("\n");
+                if(!repository.getAdditionRecordForUser(user.getId()).isEmpty()) {
+                    stringBuilder.append("Addition\n").append(repository.getAdditionRecordForUser(user.getId())).append("\n");
+                }else{
+                    stringBuilder.append("Addition\n").append("No Scores found.\n");
+                }
+                if(!repository.getSubtractionRecordForUser(user.getId()).isEmpty()) {
+                    stringBuilder.append("Subtraction\n").append(repository.getSubtractionRecordForUser(user.getId())).append("\n");
+                }else{
+                    stringBuilder.append("Subtraction\n").append("No Scores found.\n");
+                }
+                if(!repository.getMultiplicationRecordForUser(user.getId()).isEmpty()) {
+                    stringBuilder.append("Multiplication\n").append(repository.getMultiplicationRecordForUser(user.getId())).append("\n");
+                }else{
+                    stringBuilder.append("Multiplication\n").append("No Scores found.\n");
+                }
+                if(!repository.getDivisionRecordForUser(user.getId()).isEmpty()) {
+                    stringBuilder.append("Division\n").append(repository.getDivisionRecordForUser(user.getId())).append("\n\n");
+                }else{
+                    stringBuilder.append("Division\n").append("No Scores found.\n\n");
+                }
             }
             String usersString = stringBuilder.toString();
 //            this.userList.addAll(userList);
