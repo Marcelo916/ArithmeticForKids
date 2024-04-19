@@ -16,4 +16,7 @@ public interface SubtractionLogDAO {
 
     @Query("SELECT * FROM " + AdditionLogDatabase.SUBTRACTION_LOG_TABLE + " ORDER BY bestScore DESC LIMIT 1")
     List<SubtractionLog> getSubtractionRecords();
+
+    @Query("SELECT * FROM " + AdditionLogDatabase.SUBTRACTION_LOG_TABLE + " WHERE userId = :userId" + " ORDER BY bestScore DESC LIMIT 1")
+    List<SubtractionLog> getSubtractionRecordByUserId(int userId);
 }

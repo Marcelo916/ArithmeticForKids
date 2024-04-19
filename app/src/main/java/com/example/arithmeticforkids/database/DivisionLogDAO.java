@@ -16,4 +16,7 @@ public interface DivisionLogDAO {
 
     @Query("SELECT * FROM " + AdditionLogDatabase.DIVISION_LOG_TABLE + " ORDER BY bestScore DESC LIMIT 1")
     List<DivisionLog> getDivisionRecords();
+
+    @Query("SELECT * FROM " + AdditionLogDatabase.DIVISION_LOG_TABLE + " WHERE userId = :userId" + " ORDER BY bestScore DESC LIMIT 1")
+    List<DivisionLog> getDivisionRecordByUserId(int userId);
 }

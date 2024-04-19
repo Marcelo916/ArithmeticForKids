@@ -16,4 +16,7 @@ public interface MultiplicationLogDAO {
 
     @Query("SELECT * FROM " + AdditionLogDatabase.MULTIPLICATION_LOG_TABLE + " ORDER BY bestScore DESC LIMIT 1")
     List<MultiplicationLog> getMultiplicationRecords();
+
+    @Query("SELECT * FROM " + AdditionLogDatabase.MULTIPLICATION_LOG_TABLE + " WHERE userId = :userId" + " ORDER BY bestScore DESC LIMIT 1")
+    List<MultiplicationLog> getMultiplicationRecordByUserId(int userId);
 }

@@ -183,4 +183,72 @@ public class AdditionLogRepository {
     public LiveData<List<User>> getAllUsers(){
         return userDAO.getAllUsers();
     }
+
+    public ArrayList<AdditionLog> getAdditionRecordForUser(int userId) {
+        Future<ArrayList<AdditionLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<AdditionLog>>() {
+                    @Override
+                    public ArrayList<AdditionLog> call() throws Exception {
+                        return (ArrayList<AdditionLog>) additionLogDAO.getAdditionRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting AdditionLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public ArrayList<SubtractionLog> getSubtractionRecordForUser(int userId) {
+        Future<ArrayList<SubtractionLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<SubtractionLog>>() {
+                    @Override
+                    public ArrayList<SubtractionLog> call() throws Exception {
+                        return (ArrayList<SubtractionLog>) subtractionLogDAO.getSubtractionRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting SubtractionLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public ArrayList<MultiplicationLog> getMultiplicationRecordForUser(int userId) {
+        Future<ArrayList<MultiplicationLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<MultiplicationLog>>() {
+                    @Override
+                    public ArrayList<MultiplicationLog> call() throws Exception {
+                        return (ArrayList<MultiplicationLog>) multiplicationLogDAO.getMultiplicationRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting MultiplicationLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public ArrayList<DivisionLog> getDivisionRecordForUser(int userId) {
+        Future<ArrayList<DivisionLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<DivisionLog>>() {
+                    @Override
+                    public ArrayList<DivisionLog> call() throws Exception {
+                        return (ArrayList<DivisionLog>) divisionLogDAO.getDivisionRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting DivisionLog per userId in the repository");
+        }
+        return null;
+    }
 }

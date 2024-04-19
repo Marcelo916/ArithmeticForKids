@@ -7,7 +7,6 @@ import androidx.room.Query;
 
 import com.example.arithmeticforkids.database.entities.AdditionLog;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Dao
@@ -17,4 +16,7 @@ public interface AdditionLogDAO {
 
     @Query("SELECT * FROM " + AdditionLogDatabase.ADDITION_LOG_TABLE + " ORDER BY bestScore DESC LIMIT 1")
     List<AdditionLog> getAdditionRecords();
+
+    @Query("SELECT * FROM " + AdditionLogDatabase.ADDITION_LOG_TABLE + " WHERE userId = :userId" + " ORDER BY bestScore DESC LIMIT 1")
+    List<AdditionLog> getAdditionRecordByUserId(int userId);
 }
