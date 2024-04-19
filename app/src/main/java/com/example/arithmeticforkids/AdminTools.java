@@ -8,10 +8,16 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.arithmeticforkids.RecyclerView.Adapter;
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdminToolsBinding;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class AdminTools extends AppCompatActivity {
     private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
@@ -25,11 +31,9 @@ public class AdminTools extends AppCompatActivity {
     private int loggedInUserId = -1;
     private User user;
 
-//    List<String> userList = new ArrayList<>();
 
-    //todo: finish UserListDisplay so it outputs the contents of repository.GetAllUsers() and updates during onCreate() or when a user is deleted
-    //todo: hook up spinner to list provided by getAllUsers(). https://developer.android.com/develop/ui/views/components/spinner
-    //todo: make a button to delete a user that is selected in the spinner
+    //todo: create recyclerview cards that display each user AND their scores for each activity
+    //todo: remove spinner
 
     //todo: implement the settings panel so the user can log out in this activity?
 
@@ -77,16 +81,30 @@ public class AdminTools extends AppCompatActivity {
             UserListDisplay.setText(R.string.no_users_message);
         }
         });
+
+        RecyclerView recyclerView = findViewById(R.id.recycler_view); //todo: finish RecyclerView
+        recyclerView.setLayoutManager(new LinearLayoutManager(this)); //todo: fix crash caused by running refreshDisplay() more than once
+        List<String> dataList = new ArrayList<>();
+        Adapter adapter = new Adapter(dataList);
+        recyclerView.setAdapter(adapter);
+
+        repository.getAllUsers().observe(this, userList->{
+            StringBuilder stringBuilder = new StringBuilder();
+            for (User user : userList) {
+                stringBuilder.append(user.getUsername()).append("\n");
+                stringBuilder.append(repository.getAllLogs()).append("\n");
+                stringBuilder.append(repository.getAllLogsSubtraction()).append("\n");
+                stringBuilder.append(repository.getAllLogsMultiplication()).append("\n");
+                stringBuilder.append(repository.getAllLogsDivision());
+            }
+            String usersString = stringBuilder.toString();
+            if(!usersString.isEmpty()){
+                dataList.add(usersString);
+            }else{
+                dataList.add("No more users"); //todo: remove later
+            }
+        });
     }
-//    private void refreshDisplay(){
-//        TextView UserListDisplay = findViewById(R.id.UserListDisplayWindow);
-//        LiveData<List<User>> UserLogList = repository.getAllUsers();
-//        if(!UserLogList.toString().isEmpty()){
-//            UserListDisplay.setText(UserLogList.toString()); //figure out how to return list data instead of object name
-//        }else{
-//            UserListDisplay.setText(R.string.no_users_message);
-//        }
-//    }
 
     public void loginUserAdminTools(Bundle savedInstanceState) {
         //check shared preference for logged in user
