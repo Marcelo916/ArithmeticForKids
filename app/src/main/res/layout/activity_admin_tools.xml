@@ -21,16 +21,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!--add height and width margins, also create border around box-->
     <TextView
         android:id="@+id/UserListDisplayWindow"
-        android:layout_width="wrap_content"
+        android:layout_width="378dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="28dp"
         android:textColor="@color/black"
         android:textSize="24sp"
-        android:text="UserListDisplay"
-        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AdminToolsName" />
 

@@ -5,17 +5,20 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LifecycleOwner;
 import androidx.lifecycle.LiveData;
+import androidx.lifecycle.Observer;
+import androidx.lifecycle.Transformations;
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdminToolsBinding;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AdminTools extends AppCompatActivity {
     private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
@@ -29,10 +32,13 @@ public class AdminTools extends AppCompatActivity {
     private int loggedInUserId = -1;
     private User user;
 
+    List<String> userList;
+
+    //todo: finish UserListDisplay so it outputs the contents of repository.GetAllUsers() and updates during onCreate() or when a user is deleted
 
     //todo: hook up spinner to list provided by getAllUsers(). https://developer.android.com/develop/ui/views/components/spinner
     //todo: make a button to delete a user that is selected in the spinner
-    //todo: finish UserListDisplay so it outputs the contents of repository.GetAllUsers() and updates during onCreate() or when a user is deleted
+
     //todo: implement the settings panel so the user can log out in this activity?
 
 
@@ -69,10 +75,11 @@ public class AdminTools extends AppCompatActivity {
 
     private void refreshDisplay(){
         TextView UserListDisplay = findViewById(R.id.UserListDisplayWindow);
-        LiveData<List<User>> UserLogList;
-        UserLogList = repository.getAllUsers();
-        if(!UserLogList.toString().isEmpty()){
-            UserListDisplay.setText(UserLogList.toString()); //todo: figure out how to return list data instead of object name
+//        LiveData<List<User>> UserLogList = repository.getAllUsers();
+        LiveData<List<String>> UserLogListString = Transformations.map(repository.getAllUsers(),
+                userLogs-> userLogs.stream().map(User::getUsername).collect(Collectors.toList())); //todo: how do i observe the data inside of the LiveData<List<String>> object?
+        if(!UserLogListString.toString().isEmpty()){
+            UserListDisplay.setText(UserLogListString.toString()); //todo: figure out how to return list data instead of object name: "admin1 user1" instead of "androidx.lifecycle.MediatorLiveData@778ec99"
         }else{
             UserListDisplay.setText(R.string.no_users_message);
         }
