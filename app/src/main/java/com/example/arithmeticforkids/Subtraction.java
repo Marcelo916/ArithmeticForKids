@@ -302,7 +302,7 @@ public class Subtraction extends AppCompatActivity {
     }
 
     public void updateDisplaySubtraction() {
-        ArrayList<SubtractionLog> allLogsSubtraction = repository.getAllLogsSubtraction();
+        ArrayList<SubtractionLog> allLogsSubtraction = repository.getSubtractionRecordForUser(user.getId());
 
         StringBuilder sb = new StringBuilder();
         for(SubtractionLog log : allLogsSubtraction) {

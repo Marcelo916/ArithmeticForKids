@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -29,7 +27,6 @@ import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdditionBinding;
 
 import java.util.ArrayList;
-import java.util.Locale;
 
 
 public class Addition extends AppCompatActivity {
@@ -332,7 +329,7 @@ public class Addition extends AppCompatActivity {
 
     //This method retrieves records from the database
     private void updateDisplay() {
-        ArrayList<AdditionLog> allLogs = repository.getAllLogs();
+        ArrayList<AdditionLog> allLogs = repository.getAdditionRecordForUser(user.getId());
 
         StringBuilder sb = new StringBuilder();
         for(AdditionLog log : allLogs) {

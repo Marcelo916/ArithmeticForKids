@@ -15,20 +15,15 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 import androidx.lifecycle.LiveData;
 
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.DivisionLog;
 import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityDivisionBinding;
-import com.example.arithmeticforkids.databinding.ActivityMultiplicationBinding;
 
 import java.util.ArrayList;
 
@@ -297,7 +292,7 @@ public class Division extends AppCompatActivity {
     }
 
     public void updateDisplayDivision() {
-        ArrayList<DivisionLog> allLogsDivision = repository.getAllLogsDivision();
+        ArrayList<DivisionLog> allLogsDivision = repository.getDivisionRecordForUser(user.getId());
 
         StringBuilder sb = new StringBuilder();
         for(DivisionLog log : allLogsDivision) {
