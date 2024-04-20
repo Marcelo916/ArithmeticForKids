@@ -285,7 +285,7 @@ public class Multiplication extends AppCompatActivity {
     }
 
     public void updateDisplayMultiplication() {
-        ArrayList<MultiplicationLog> allLogsMultiplication = repository.getAllLogsMultiplication();
+        ArrayList<MultiplicationLog> allLogsMultiplication = repository.getMultiplicationRecordForUser(user.getId());
 
         StringBuilder sb = new StringBuilder();
         for (MultiplicationLog log : allLogsMultiplication) {

@@ -13,6 +13,7 @@ import com.example.arithmeticforkids.database.entities.SubtractionLog;
 import com.example.arithmeticforkids.database.entities.User;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -165,5 +166,118 @@ public class AdditionLogRepository {
 
     public LiveData<User> getUserByUserId(int userId) {
         return userDAO.getUserByUserId(userId);
+    }
+
+    public LiveData<List<User>> getAllUsers(){
+        return userDAO.getAllUsers();
+    }
+
+    public ArrayList<AdditionLog> getAdditionRecordForUser(int userId) {
+        Future<ArrayList<AdditionLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<AdditionLog>>() {
+                    @Override
+                    public ArrayList<AdditionLog> call() throws Exception {
+                        return (ArrayList<AdditionLog>) additionLogDAO.getAdditionRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting AdditionLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public ArrayList<SubtractionLog> getSubtractionRecordForUser(int userId) {
+        Future<ArrayList<SubtractionLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<SubtractionLog>>() {
+                    @Override
+                    public ArrayList<SubtractionLog> call() throws Exception {
+                        return (ArrayList<SubtractionLog>) subtractionLogDAO.getSubtractionRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting SubtractionLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public ArrayList<MultiplicationLog> getMultiplicationRecordForUser(int userId) {
+        Future<ArrayList<MultiplicationLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<MultiplicationLog>>() {
+                    @Override
+                    public ArrayList<MultiplicationLog> call() throws Exception {
+                        return (ArrayList<MultiplicationLog>) multiplicationLogDAO.getMultiplicationRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting MultiplicationLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public ArrayList<DivisionLog> getDivisionRecordForUser(int userId) {
+        Future<ArrayList<DivisionLog>> future = AdditionLogDatabase.databaseWriteExecutor.submit(
+                new Callable<ArrayList<DivisionLog>>() {
+                    @Override
+                    public ArrayList<DivisionLog> call() throws Exception {
+                        return (ArrayList<DivisionLog>) divisionLogDAO.getDivisionRecordByUserId(userId);
+                    }
+                }
+        );
+        try{
+            return  future.get();
+        } catch (InterruptedException | ExecutionException e) {
+            Log.i(MainActivity.TAG, "Problem when getting DivisionLog per userId in the repository");
+        }
+        return null;
+    }
+
+    public static void delete(User user) {
+                {
+                    user.setUsername(null);
+                    user.setPassword(null);
+                    user.setId(-1);
+                }
+    }
+
+    public static void update(User user) {
+                {
+                    user.setUsername("test2");
+                    user.setPassword("test2");
+                    user.setId(3);
+                }
+    }
+
+    public static void deleteAdditionLog(AdditionLog additionLog) {
+        {
+            additionLog.setUserId(-0);
+            additionLog.setBestScore(-0);
+        }
+    }
+    public static void deleteSubtractionLog(SubtractionLog subtractionLog) {
+        {
+            subtractionLog.setUserId(-0);
+            subtractionLog.setBestScore(-0);
+        }
+    }
+    public static void deleteMultiplicationLog(MultiplicationLog multiplicationLog) {
+        {
+            multiplicationLog.setUserId(-0);
+            multiplicationLog.setBestScore(-0);
+        }
+    }
+    public static void deleteDivisionLog(DivisionLog divisionLog) {
+        {
+            divisionLog.setUserId(-0);
+            divisionLog.setBestScore(-0);
+        }
     }
 }

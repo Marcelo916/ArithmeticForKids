@@ -2,6 +2,9 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
+      <entry key="AdditionLogDatabaseTest">
+        <State />
+      </entry>
       <entry key="app">
         <State>
           <targetSelectedWithDropDown>
@@ -17,6 +20,18 @@
           </targetSelectedWithDropDown>
           <timeTargetWasSelectedWithDropDown value="2024-04-10T23:31:47.917363500Z" />
         </State>
+      </entry>
+      <entry key="testAdditionLogDelete()">
+        <State />
+      </entry>
+      <entry key="testAdditionLogInsert()">
+        <State />
+      </entry>
+      <entry key="testAdditionLogUpdate()">
+        <State />
+      </entry>
+      <entry key="testUserInsert()">
+        <State />
       </entry>
     </value>
   </component>

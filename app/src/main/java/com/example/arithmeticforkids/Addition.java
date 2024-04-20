@@ -294,7 +294,7 @@ public class Addition extends AppCompatActivity {
 
     //This method retrieves records from the database
     private void updateDisplay() {
-        ArrayList<AdditionLog> allLogs = repository.getAllLogs();
+        ArrayList<AdditionLog> allLogs = repository.getAdditionRecordForUser(user.getId());
 
         StringBuilder sb = new StringBuilder();
         for (AdditionLog log : allLogs) {

@@ -48,6 +48,7 @@ public class AdminMainActivity extends AppCompatActivity {
         binding.AdminSubtractionButton.setOnClickListener(buttonClickLister);
         binding.AdminMultiplicationButton.setOnClickListener(buttonClickLister);
         binding.AdminDivisionButton.setOnClickListener(buttonClickLister);
+        binding.AdminToolsButton.setOnClickListener(buttonClickLister);
 
     }
 
@@ -169,6 +170,10 @@ public class AdminMainActivity extends AppCompatActivity {
             } else if (v == binding.AdminDivisionButton) {
                 Intent intent = Division.divisionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "division");
+                startActivity(intent);
+            } else if (v == binding.AdminToolsButton) {
+                Intent intent = AdminTools.adminToolsFactory(getApplicationContext(), user.getId());
+                intent.putExtra("operation", "admin-tools");
                 startActivity(intent);
             }
         }

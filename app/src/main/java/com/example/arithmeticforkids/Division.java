@@ -283,7 +283,7 @@ public class Division extends AppCompatActivity {
     }
 
     public void updateDisplayDivision() {
-        ArrayList<DivisionLog> allLogsDivision = repository.getAllLogsDivision();
+        ArrayList<DivisionLog> allLogsDivision = repository.getDivisionRecordForUser(user.getId());
 
         StringBuilder sb = new StringBuilder();
         for (DivisionLog log : allLogsDivision) {
