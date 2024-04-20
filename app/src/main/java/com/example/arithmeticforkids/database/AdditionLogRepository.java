@@ -251,4 +251,45 @@ public class AdditionLogRepository {
         }
         return null;
     }
+
+    public static void delete(User user) {
+                {
+                    user.setUsername(null);
+                    user.setPassword(null);
+                    user.setId(-1);
+                }
+    }
+
+    public static void update(User user) {
+                {
+                    user.setUsername("test2");
+                    user.setPassword("test2");
+                    user.setId(3);
+                }
+    }
+
+    public static void deleteAdditionLog(AdditionLog additionLog) {
+        {
+            additionLog.setUserId(-0);
+            additionLog.setBestScore(-0);
+        }
+    }
+    public static void deleteSubtractionLog(SubtractionLog subtractionLog) {
+        {
+            subtractionLog.setUserId(-0);
+            subtractionLog.setBestScore(-0);
+        }
+    }
+    public static void deleteMultiplicationLog(MultiplicationLog multiplicationLog) {
+        {
+            multiplicationLog.setUserId(-0);
+            multiplicationLog.setBestScore(-0);
+        }
+    }
+    public static void deleteDivisionLog(DivisionLog divisionLog) {
+        {
+            divisionLog.setUserId(-0);
+            divisionLog.setBestScore(-0);
+        }
+    }
 }
