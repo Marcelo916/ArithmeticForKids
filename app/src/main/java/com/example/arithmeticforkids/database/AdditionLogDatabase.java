@@ -72,6 +72,21 @@ public abstract class AdditionLogDatabase extends RoomDatabase {
         }
     };
 
+    private static final RoomDatabase.Callback addNewUser = new RoomDatabase.Callback() {
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db) {
+            super.onCreate(db);
+            Log.d(MainActivity.TAG, "DATABASE CREATED!");
+            databaseWriteExecutor.execute(() -> {
+                UserDAO dao = INSTANCE.userDAO();
+                dao.deleteAll();
+                User admin = new User("admin1", "admin1");
+                admin.setAdmin(true);
+            });
+        }
+    };
+
+
     public abstract AdditionLogDAO additionLogDAO();
 
     public abstract SubtractionLogDAO subtractionLogDAO();

@@ -1,5 +1,8 @@
 package com.example.arithmeticforkids;
 
+import static androidx.core.graphics.TypefaceCompat.clearCache;
+
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -38,6 +41,7 @@ public class AdminTools extends AppCompatActivity {
         return intent;
     }
 
+    @SuppressLint("RestrictedApi")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,10 +53,27 @@ public class AdminTools extends AppCompatActivity {
 
         binding.ShowUsersButtonAdminTools.setOnClickListener(v -> refreshDisplay());
 
+        binding.AddUserButtonAdminTools.setOnClickListener(v -> addUser());
+
+        binding.AddAdminButtonAdminTools.setOnClickListener(v -> addAdmin());
+
+        binding.ClearCacheButtonAdminTools.setOnClickListener(v -> clearCache());
+
         binding.goBackButtonAdminTools.setOnClickListener(v -> startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId())));
 
         TextView textView = findViewById(R.id.UserListDisplayWindow);
         textView.setMovementMethod(new ScrollingMovementMethod());
+    }
+
+    private void addUser(){
+        User newUser = new User("newUser", "newUser");
+        repository.insertUser(newUser);
+    }
+
+    private void addAdmin(){
+        User newAdmin = new User("newAdmin", "newAdmin");
+        newAdmin.setAdmin(true);
+        repository.insertUser(newAdmin);
     }
 
     private void refreshDisplay(){

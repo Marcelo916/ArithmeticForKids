@@ -34,4 +34,7 @@
     <string name="display_data">Display Data</string>
     <string name="no_users_message">No users found.</string>
     <string name="press_the_button_to_load">Press the button to load</string>
+    <string name="add_user">Add User</string>
+    <string name="add_admin">Add Admin</string>
+    <string name="clear_cache">Clear Cache</string>
 </resources>
