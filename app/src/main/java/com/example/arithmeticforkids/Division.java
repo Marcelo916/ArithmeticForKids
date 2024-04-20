@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -14,20 +15,29 @@ import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
+import androidx.lifecycle.LiveData;
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.DivisionLog;
+import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityDivisionBinding;
-import com.example.arithmeticforkids.databinding.ActivityMultiplicationBinding;
+
+import java.util.ArrayList;
 
 public class Division extends AppCompatActivity {
+    private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
+    static final String SHARED_PREFERENCE_USERID_KEY = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_KEY";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.arithmeticforkids.SAVED_INSTANCE_STATE_USERID_KEY";
+    static final String SHARED_PREFERENCE_USERID_VALUE = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_VALUE";
+    private static final int LOGGED_OUT = -1;
 
     ActivityDivisionBinding binding;
+    private AdditionLogRepository repository;
+    private int loggedInUserId = -1;
+    private User user;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
@@ -55,6 +65,8 @@ public class Division extends AppCompatActivity {
             answerC.setEnabled(false);
             answerD.setEnabled(false);
             bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            insertDivisionRecord();
+            updateDisplayDivision();
             goButton.setVisibility(View.VISIBLE);
 
         }
@@ -65,6 +77,9 @@ public class Division extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityDivisionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repository = AdditionLogRepository.getRepository(getApplication());
+        loginUserDivision(savedInstanceState);
 
         goButton = findViewById(R.id.startActionDivision);
         answerA = findViewById(R.id.answerADivision);
@@ -128,12 +143,11 @@ public class Division extends AppCompatActivity {
         binding.goBackButtonDivision.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Division.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                startActivity(intent);
-                finish();
+                if (user.isAdmin()) {
+                    startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+                } else {
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                }
             }
         });
 
@@ -142,7 +156,7 @@ public class Division extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void nextTurn() {
         game.newQuestion();
-        int [] answer = game.getCurrentQuestion().getStoredNumbers();
+        int[] answer = game.getCurrentQuestion().getStoredNumbers();
 
         answerA.setText(Integer.toString(answer[0]));
         answerB.setText(Integer.toString(answer[1]));
@@ -158,8 +172,44 @@ public class Division extends AppCompatActivity {
         bottom.setText(game.getCorrect() + "/" + (game.getTotalQuestions() - 1));
     }
 
-    public static Intent divisionFactory(Context context) {
+    public void loginUserDivision(Bundle savedInstanceState) {
+        //check shared preference for logged in user
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+            loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
+        userObserver.observe(this, user -> {
+            this.user = user;
+            if (this.user != null) {
+                invalidateOptionsMenu();
+            }
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, loggedInUserId);
+        sharedPrefEditor.apply();
+    }
+
+    public static Intent divisionFactory(Context context, int userId) {
         Intent intent = new Intent(context, Division.class);
+        intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
@@ -174,7 +224,10 @@ public class Division extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Marcelo");
+        if (user == null) {
+            return false;
+        }
+        item.setTitle(user.getUsername());
 
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -208,13 +261,36 @@ public class Division extends AppCompatActivity {
             }
         });
 
-        alertBuilder.create().show();;
+        alertBuilder.create().show();
+        ;
     }
 
 
     private void logoutDivision() {
-        //TODO: Finish logout method
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCE_USERID_KEY, LOGGED_OUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+    }
+
+    private void insertDivisionRecord() {
+        DivisionLog log = new DivisionLog(game.getScore(), loggedInUserId);
+        repository.insertDivisionLog(log);
+    }
+
+    public void updateDisplayDivision() {
+        ArrayList<DivisionLog> allLogsDivision = repository.getAllLogsDivision();
+
+        StringBuilder sb = new StringBuilder();
+        for (DivisionLog log : allLogsDivision) {
+            sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
+            sb.append(log);
+        }
+        bottom.setText(sb.toString());
     }
 
 

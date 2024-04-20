@@ -4,6 +4,7 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.view.Menu;
@@ -13,18 +14,32 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.AdditionLog;
+import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityAdditionBinding;
+
+import java.util.ArrayList;
 
 
 public class Addition extends AppCompatActivity {
+
+    private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
+    static final String SHARED_PREFERENCE_USERID_KEY = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_KEY";
+    static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.arithmeticforkids.SAVED_INSTANCE_STATE_USERID_KEY";
+    static final String SHARED_PREFERENCE_USERID_VALUE = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_VALUE";
+    private static final int LOGGED_OUT = -1;
     ActivityAdditionBinding binding;
+    private AdditionLogRepository repository;
+    private int loggedInUserId = -1;
+    private User user;
 
     Button goButton, answerA, answerB, answerC, answerD;
     TextView left, right, middle, bottom;
@@ -51,6 +66,8 @@ public class Addition extends AppCompatActivity {
             answerC.setEnabled(false);
             answerD.setEnabled(false);
             bottom.setText("You got " + game.getCorrect() + " out of " + (game.getTotalQuestions() - 1) + " questions!");
+            insertAdditionRecord();
+            updateDisplay();
             goButton.setVisibility(View.VISIBLE);
 
         }
@@ -63,6 +80,9 @@ public class Addition extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = ActivityAdditionBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
+
+        repository = AdditionLogRepository.getRepository(getApplication());
+        loginUserAddition(savedInstanceState);
 
         goButton = findViewById(R.id.startAction);
         answerA = findViewById(R.id.answerA);
@@ -98,6 +118,7 @@ public class Addition extends AppCompatActivity {
                 secondsRemaining = 30;
                 game = new Game("addition");
                 nextTurn();
+                right.setText(Integer.toString(game.getScore()) + "pts");
                 clock.start();
 
             }
@@ -124,15 +145,17 @@ public class Addition extends AppCompatActivity {
         answerC.setOnClickListener(answerClickListener);
         answerD.setOnClickListener(answerClickListener);
 
+
         binding.goBackButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                //Intent intent = new Intent(Addition.this, MainActivity.class);
-                //startActivity(intent);
-                //finish();
-                Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                startActivity(intent);
-                finish();
+
+                if (user.isAdmin()) {
+                    startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+                } else {
+                    startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                }
+
             }
         });
 
@@ -142,7 +165,7 @@ public class Addition extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     public void nextTurn() {
         game.newQuestion();
-        int [] answer = game.getCurrentQuestion().getStoredNumbers();
+        int[] answer = game.getCurrentQuestion().getStoredNumbers();
 
         answerA.setText(Integer.toString(answer[0]));
         answerB.setText(Integer.toString(answer[1]));
@@ -158,8 +181,45 @@ public class Addition extends AppCompatActivity {
         bottom.setText(game.getCorrect() + "/" + (game.getTotalQuestions() - 1));
     }
 
-    public static Intent additionFactory(Context context) {
+
+    public void loginUserAddition(Bundle savedInstanceState) {
+        //check shared preference for logged in user
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+
+        if (sharedPreferences.contains(SHARED_PREFERENCE_USERID_VALUE)) {
+            loggedInUserId = sharedPreferences.getInt(SHARED_PREFERENCE_USERID_VALUE, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT & savedInstanceState != null && savedInstanceState.containsKey(SAVED_INSTANCE_STATE_USERID_KEY)) {
+            loggedInUserId = savedInstanceState.getInt(SAVED_INSTANCE_STATE_USERID_KEY, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            loggedInUserId = getIntent().getIntExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+        }
+        if (loggedInUserId == LOGGED_OUT) {
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserId(loggedInUserId);
+        userObserver.observe(this, user -> {
+            this.user = user;
+            if (this.user != null) {
+                invalidateOptionsMenu();
+            }
+        });
+    }
+
+    @Override
+    protected void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        outState.putInt(SAVED_INSTANCE_STATE_USERID_KEY, loggedInUserId);
+        SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(MainActivity.SHARED_PREFERENCE_USERID_KEY, loggedInUserId);
+        sharedPrefEditor.apply();
+    }
+
+    public static Intent additionFactory(Context context, int userId) {
         Intent intent = new Intent(context, Addition.class);
+        intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
     }
 
@@ -174,7 +234,10 @@ public class Addition extends AppCompatActivity {
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
-        item.setTitle("Marcelo");
+        if (user == null) {
+            return false;
+        }
+        item.setTitle(user.getUsername());
 
         item.setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
             @Override
@@ -212,8 +275,33 @@ public class Addition extends AppCompatActivity {
     }
 
     private void logoutAddition() {
-        //TODO: Finish logout method
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
+        SharedPreferences.Editor sharedPrefEditor = sharedPreferences.edit();
+        sharedPrefEditor.putInt(SHARED_PREFERENCE_USERID_KEY, LOGGED_OUT);
+        sharedPrefEditor.apply();
+
+        getIntent().putExtra(MAIN_ACTIVITY_USER_ID, LOGGED_OUT);
+
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
+    }
+
+    //This method inserts the records to the database
+    private void insertAdditionRecord() {
+        AdditionLog log = new AdditionLog(game.getScore(), loggedInUserId);
+        repository.insertAdditionLog(log);
+    }
+
+
+    //This method retrieves records from the database
+    private void updateDisplay() {
+        ArrayList<AdditionLog> allLogs = repository.getAllLogs();
+
+        StringBuilder sb = new StringBuilder();
+        for (AdditionLog log : allLogs) {
+            sb.append("You got ").append(game.getCorrect()).append(" out of ").append(game.getTotalQuestions() - 1).append(" questions!\n");
+            sb.append(log);
+        }
+        bottom.setText(sb.toString());
     }
 
 }

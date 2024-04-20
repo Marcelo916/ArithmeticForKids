@@ -7,13 +7,17 @@ import android.view.View;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.LiveData;
 
+import com.example.arithmeticforkids.database.AdditionLogRepository;
+import com.example.arithmeticforkids.database.entities.User;
 import com.example.arithmeticforkids.databinding.ActivityLoginBinding;
 
 
 public class LoginActivity extends AppCompatActivity {
 
     private ActivityLoginBinding binding;
+    private AdditionLogRepository repository;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,32 +25,45 @@ public class LoginActivity extends AppCompatActivity {
         binding = ActivityLoginBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
+        repository = AdditionLogRepository.getRepository(getApplication());
+
         binding.loggingButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(!verifyUser()) {
-                    Toast.makeText(LoginActivity.this, "Invalid Username or Password", Toast.LENGTH_SHORT).show();
-                } else {
-                    Intent intent = MainActivity.mainActivityIntentFactory(getApplicationContext(), 0);
-                    startActivity(intent);
-                }
+                verifyUserOne();
             }
         });
     }
 
-    //We will have to update this method. The code is to test the login page working properly.
-    private boolean verifyUser() {
-        //Hardcoded valid user and password
-        String validUsername = "example_user";
-        String validPassword = "password123";
+    private void verifyUserOne() {
+        String username = binding.userName.getText().toString();
+        if (username.isEmpty()) {
+            toastMaker("Username should not be blank!");
+            return;
+        }
+        LiveData<User> userObserver = repository.getUserByUserName(username);
+        userObserver.observe(this, user -> {
+            if (user != null) {
+                String password = binding.password.getText().toString();
+                if (password.equals(user.getPassword())) {
+                    if (user.isAdmin()) {
+                        startActivity(AdminMainActivity.adminActivityIntentFactory(getApplicationContext(), user.getId()));
+                    } else {
+                        startActivity(MainActivity.mainActivityIntentFactory(getApplicationContext(), user.getId()));
+                    }
+                } else {
+                    toastMaker("Invalid password!");
+                    binding.password.setSelection(0);
+                }
+            } else {
+                toastMaker(String.format("No user %s is not a valid username.", username));
+                binding.password.setSelection(0);
+            }
+        });
+    }
 
-        // Get the entered username and password from Text fields
-        String enteredUsername = binding.userName.getText().toString().trim();
-        String enteredPassword = binding.password.getText().toString().trim();
-
-        // Check if the entered username and password match the valid credentials
-        return enteredUsername.equals(validUsername) && enteredPassword.equals(validPassword);
-
+    private void toastMaker(String message) {
+        Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
     static Intent loginIntentFactory(Context context) {

@@ -15,46 +15,43 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.lifecycle.LiveData;
 
-
 import com.example.arithmeticforkids.database.AdditionLogRepository;
 import com.example.arithmeticforkids.database.entities.User;
-import com.example.arithmeticforkids.databinding.ActivityMainBinding;
+import com.example.arithmeticforkids.databinding.ActivityAdminMainBinding;
 
-public class MainActivity extends AppCompatActivity {
-
-    private static final String MAIN_ACTIVITY_USER_ID = "com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
+public class AdminMainActivity extends AppCompatActivity {
+    private static final String MAIN_ACTIVITY_USER_ID = "package com.example.arithmeticforkids.MAIN_ACTIVITY_USER_ID";
     static final String SHARED_PREFERENCE_USERID_KEY = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_KEY";
     static final String SAVED_INSTANCE_STATE_USERID_KEY = "com.example.arithmeticforkids.SAVED_INSTANCE_STATE_USERID_KEY";
     static final String SHARED_PREFERENCE_USERID_VALUE = "com.example.arithmeticforkids.SHARED_PREFERENCE_USERID_VALUE";
     private static final int LOGGED_OUT = -1;
-    ActivityMainBinding binding;
+    ActivityAdminMainBinding binding;
     private AdditionLogRepository repository;
-    public static final String TAG = "DAC_APPLOG";
     private int loggedInUserId = -1;
     private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
+        binding = ActivityAdminMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         repository = AdditionLogRepository.getRepository(getApplication());
-        loginUser(savedInstanceState);
+        loginUserAdmin(savedInstanceState);
 
         if (loggedInUserId == -1) {
             Intent intent = LoginActivity.loginIntentFactory(getApplicationContext());
             startActivity(intent);
         }
 
-        //Setting click listeners for all buttons
-        binding.additionButton.setOnClickListener(buttonClickLister);
-        binding.subtractionButton.setOnClickListener(buttonClickLister);
-        binding.multiplicationButton.setOnClickListener(buttonClickLister);
-        binding.divisionButton.setOnClickListener(buttonClickLister);
+        binding.AdminAdditionButton.setOnClickListener(buttonClickLister);
+        binding.AdminSubtractionButton.setOnClickListener(buttonClickLister);
+        binding.AdminMultiplicationButton.setOnClickListener(buttonClickLister);
+        binding.AdminDivisionButton.setOnClickListener(buttonClickLister);
+
     }
 
-    public void loginUser(Bundle savedInstanceState) {
+    public void loginUserAdmin(Bundle savedInstanceState) {
         //check shared preference for logged in user
         SharedPreferences sharedPreferences = getSharedPreferences(SHARED_PREFERENCE_USERID_KEY, Context.MODE_PRIVATE);
 
@@ -96,7 +93,6 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
     public boolean onPrepareOptionsMenu(Menu menu) {
         MenuItem item = menu.findItem(R.id.logoutMenuItem);
         item.setVisible(true);
@@ -115,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showLogoutDialog() {
-        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(MainActivity.this);
+        AlertDialog.Builder alertBuilder = new AlertDialog.Builder(AdminMainActivity.this);
         final AlertDialog alertDialog = alertBuilder.create();
 
         alertBuilder.setMessage("Logout?");
@@ -148,34 +144,33 @@ public class MainActivity extends AppCompatActivity {
         startActivity(LoginActivity.loginIntentFactory(getApplicationContext()));
     }
 
-    static Intent mainActivityIntentFactory(Context context, int userId) {
-        Intent intent = new Intent(context, MainActivity.class);
+
+    static Intent adminActivityIntentFactory(Context context, int userId) {
+        Intent intent = new Intent(context, AdminMainActivity.class);
         intent.putExtra(MAIN_ACTIVITY_USER_ID, userId);
         return intent;
-
     }
 
     private final View.OnClickListener buttonClickLister = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (v == binding.additionButton) {
+            if (v == binding.AdminAdditionButton) {
                 Intent intent = Addition.additionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "addition");
                 startActivity(intent);
-            } else if (v == binding.subtractionButton) {
+            } else if (v == binding.AdminSubtractionButton) {
                 Intent intent = Subtraction.subtractionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "subtraction");
                 startActivity(intent);
-            } else if (v == binding.multiplicationButton) {
+            } else if (v == binding.AdminMultiplicationButton) {
                 Intent intent = Multiplication.multiplicationFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "multiplication");
                 startActivity(intent);
-            } else if (v == binding.divisionButton) {
+            } else if (v == binding.AdminDivisionButton) {
                 Intent intent = Division.divisionFactory(getApplicationContext(), user.getId());
                 intent.putExtra("operation", "division");
                 startActivity(intent);
             }
         }
     };
-
 }
